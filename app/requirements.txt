@@ -1,9 +1,6 @@
 fastapi
 uvicorn[standard]
 qdrant-client
-langchain
-langchain-community
 pydantic-settings
 python-dotenv
-requests
-pymongo
+httpx
