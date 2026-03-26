@@ -8,7 +8,7 @@ This document outlines the step-by-step roadmap for building the **Unified Shopi
 *   **Settings Management:** Use `pydantic-settings` to manage API keys (Jina, Qdrant), weights, and system-wide constants.
 *   **Client Initialization:**
     *   Initialize `QdrantClient` in `async` mode.
-    *   Initialize `JinaEmbeddings` via LangChain.
+    *   Initialize a persistent `httpx.AsyncClient` for Jina AI API requests.
 *   **Multi-tenancy Setup:** Logic to ensure a Qdrant "Collection" exists for each `store_id` (or using a single collection with partitioning).
 
 ---
@@ -19,7 +19,7 @@ This document outlines the step-by-step roadmap for building the **Unified Shopi
     *   `EmbeddingSource`: Specific fields used for vectorization.
 *   **Logic:**
     1.  Concatenate `title`, `description`, and `tags`.
-    2.  Generate embedding using Jina AI API.
+    2.  Generate embedding using direct `httpx` POST requests to Jina AI's `/v1/embeddings` endpoint.
     3.  Upsert to Qdrant with `product_id` as the point ID and the store's custom JSON as the payload.
 
 ---

@@ -9,7 +9,7 @@ The system is built as a cloud-native, high-performance microservice designed fo
 
 ### Core Components
 1.  **FastAPI Application:** The entry point for all storefront and administrative requests. Handles request validation, orchestration, and business logic.
-2.  **Embedding Service (Jina AI via LangChain):** Transforms raw product text (Title, Description, etc.) into high-dimensional vectors (embeddings). This uses Jina's API-based models (e.g., `jina-embeddings-v2-base-en`), ensuring high-quality semantic representations without requiring local GPU resources.
+2.  **Embedding Service (Direct API via `httpx`):** Transforms raw product text (Title, Description, etc.) into high-dimensional vectors (embeddings). This uses Jina's API-based models (e.g., `jina-embeddings-v2-base-en`) via direct HTTP requests, ensuring high-quality semantic representations with minimal overhead and maximum scalability.
 3.  **Qdrant Vector Database:** The storage and search engine. Manages high-dimensional vectors and associated metadata, providing extremely fast similarity searches.
 4.  **Shopify Integration Layer:** Future component (planned) to handle OAuth and Webhook-based data synchronization.
 
