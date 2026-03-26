@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.api.sync import router as sync_router
-from app.api.search import router as search_router
-from app.api.recommend import router as recommend_router
+from api.sync import router as sync_router
+from api.search import router as search_router
+from api.recommend import router as recommend_router
 
 app = FastAPI(title="Unified Shopify Recommendation Engine")
 
@@ -16,4 +16,6 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
