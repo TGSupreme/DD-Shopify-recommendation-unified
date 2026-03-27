@@ -24,7 +24,7 @@ To integrate a store, the system requires a hybrid data approach to ensure both 
 
 *   **Semantic Intelligence:** By requiring core text fields, the system ensures that every product has a high-quality "Digital Fingerprint" in the vector space.
 *   **"Bring Your Own Schema" (BYOS) Filtering:** Because the extended metadata is treated as an opaque object, merchants can filter recommendations using their own custom attributes (e.g., "Filter by `color: 'Red'`") without any backend configuration changes.
-*   **Data Privacy & Isolation:** Every store’s data is kept in a strictly separated "Collection," identified by a unique Store ID, ensuring no data leakage between merchants.
+*   **Data Privacy & Isolation:** Every store’s data is kept within a shared "Collection," but isolated using a unique Store ID as a **partition key** (Tenant Indexing). This ensures strict separation and no data leakage between merchants while providing superior database performance at scale.
 
 #### B. The Weighted Recommendation Logic
 Our "User Interest" engine calculates what a customer wants by looking at their journey across three tiers of intent:

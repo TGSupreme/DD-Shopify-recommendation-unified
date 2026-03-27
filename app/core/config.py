@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     # Qdrant Configuration
     QDRANT_URL: str = "http://localhost:6333"
     QDRANT_API_KEY: Optional[str] = None
+    COLLECTION_NAME: str = "Shopify-recommendation-unified"
     
     # Jina AI Configuration
     JINA_API_KEY: Optional[str] = None
@@ -18,6 +19,7 @@ class Settings(BaseSettings):
     
     # System Configuration
     VECTOR_DIMENSION: int = 768
+    TOP_K: int = 10
     
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

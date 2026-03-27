@@ -4,13 +4,13 @@ This document outlines the step-by-step roadmap for building the **Unified Shopi
 
 ---
 
-## Phase 1: Foundation, Configuration & Observability
-*   **Settings Management:** Use `pydantic-settings` for API keys and weights.
+## Phase 1: Foundation, Configuration & Observability [COMPLETED]
+*   **Settings Management:** Use `pydantic-settings` for API keys and weights. (Implemented in `app/core/config.py`)
 *   **Structured Logging:** 
-    *   Configure the standard `logging` module with a consistent format (Timestamp, Level, StoreID, Message).
+    *   Configure the standard `logging` module with a consistent format (Timestamp, Level, Name, Message). (Implemented in `app/main.py`)
     *   Initialize a global logger for the application.
 *   **Client Initialization:**
-    *   `QdrantClient` (async) and `JinaEmbeddings` via LangChain.
+    *   `QdrantClient` (async) and `JinaEmbeddings` initialization. (Implemented in `app/services/`)
 
 ---
 

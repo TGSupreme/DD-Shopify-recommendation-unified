@@ -91,7 +91,11 @@ The following parameters are managed via **Environment Variables** for global co
 
 | Variable | Description | Recommended Value |
 | :--- | :--- | :--- |
+| `COLLECTION_NAME` | The default Qdrant collection for products | `products` |
 | `WEIGHT_VIEW` | Influence of viewed products | 1.0 |
 | `WEIGHT_CART` | Influence of added-to-cart products | 3.0 |
 | `WEIGHT_PURCHASE` | Influence of purchased products | 5.0 |
 | `VECTOR_DIMENSION` | Dimension of the embedding model | (e.g., 384 or 768) |
+| `TOP_K` | Default number of results for discovery | 10 |
+| `JINA_API_KEY` | API key for Jina AI embeddings | (Required) |
+| `QDRANT_URL` | URL for the Qdrant instance | (Required) |

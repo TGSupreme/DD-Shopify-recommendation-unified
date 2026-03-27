@@ -1,7 +1,15 @@
+import logging
 from fastapi import FastAPI
 from api.sync import router as sync_router
 from api.search import router as search_router
 from api.recommend import router as recommend_router
+
+# Configure Structured Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger("main")
 
 app = FastAPI(title="Unified Shopify Recommendation Engine")
 
@@ -12,10 +20,9 @@ app.include_router(recommend_router, prefix="/recommend", tags=["Recommend"])
 
 @app.get("/")
 async def root():
-    return {"message": "Unified Shopify Recommendation Engine API is running"}
+    logger.info("Root endpoint accessed.")
+    return {"message": "Unified Shopify Recommendation Engine API is running - Phase 1 Foundation Complete"}
 
 if __name__ == "__main__":
     import uvicorn
-    # uvicorn.run(app, host="0.0.0.0", port=8000)
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
