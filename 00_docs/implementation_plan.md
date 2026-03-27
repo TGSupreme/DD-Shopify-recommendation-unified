@@ -14,11 +14,11 @@ This document outlines the step-by-step roadmap for building the **Unified Shopi
 
 ---
 
-## Phase 2: Data Ingestion Pipeline (`/sync`)
-*   **Model Definition:** `ProductUpsert`, `EmbeddingSource`.
+## Phase 2: Data Ingestion Pipeline (`/sync`) [COMPLETED]
+*   **Model Definition:** `ProductUpsert`, `EmbeddingSource`. (Implemented in `app/models/schemas.py`)
 *   **Logic & Logging:**
     1.  **LOG:** Start of ingestion for `{store_id}` with `{count}` products.
-    2.  Vectorize text fields via Jina AI. **LOG:** Jina API latency and token usage (if available).
+    2.  Vectorize text fields via Jina AI. **LOG:** Jina AI latency and token usage.
     3.  Upsert to Qdrant. **LOG:** Success/Failure of the vector storage operation.
 
 ---

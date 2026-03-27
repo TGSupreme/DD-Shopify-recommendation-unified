@@ -12,7 +12,12 @@ This document tracks features and technical requirements that are planned for fu
 
 ---
 
-## 2. Shopify Platform Integration
+## 2. Platform Integration & Store Lifecycle
+*   **Store Registration Service:** A mandatory registration flow where a merchant's store is onboarded before using any API functionality.
+*   **Dynamic Metadata Schema Management (MongoDB):**
+    *   **Logic:** Upon registration or initial sync, the system will identify and store the merchant's specific `metadata` keys (e.g., `color`, `material`, `price_range`).
+    *   **Storage:** These schemas will be stored in a dedicated **MongoDB** instance to allow for ultra-flexible, per-store filtering logic.
+    *   **Discovery:** This allows the API to "know" which filters are available for each store, enabling advanced front-end UI generation for faceted search.
 *   **Webhook Listener:** Automated syncing of product data when a merchant adds, updates, or deletes an item in Shopify.
 *   **App Proxy:** Securely routing storefront requests through Shopify to our FastAPI engine.
 *   **Admin Dashboard:** A simple UI within the Shopify Admin for merchants to see their recommendation statistics.

@@ -40,6 +40,10 @@ Security is a primary concern. The system ensures that Store A can never access 
 
 *   **Logical Isolation:** Every request requires a `store_id`.
 *   **Vector Isolation:** Qdrant is configured to use a single collection (defined by `COLLECTION_NAME`) with the `store_id` as a partition key (Tenant Indexing). This ensures that searches are strictly scoped to a single merchant's catalog at the database level while maintaining high efficiency across many stores.
+*   **Performance Indexing:** To ensure sub-millisecond filtering, the following payload indexes are automatically created upon collection initialization:
+    *   **Tenant Index:** `store_id` (Keyword index with `is_tenant=True`).
+    *   **Core Keyword Indexes:** `product_id`, `brand`, and `category`.
+    *   **Metadata Filtering:** Opaque `metadata` fields are filtered dynamically after the tenant partition is applied.
 
 ---
 

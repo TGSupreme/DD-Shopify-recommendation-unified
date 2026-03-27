@@ -14,9 +14,11 @@ These endpoints are used to keep the product catalog up-to-date.
   {
     "product_id": "gid://shopify/Product/123",
     "embedding_source": {
-      "title": "...",
-      "description": "...",
-      "tags": ["...", "..."]
+      "title": "Classic Cotton T-Shirt",
+      "brand": "Urban Essentials",
+      "category": "Apparel",
+      "description": "Premium 100% organic cotton...",
+      "tags": ["Essential", "Summer", "Cotton"]
     },
     "metadata": {
       "price": 45.00,
@@ -36,7 +38,7 @@ These endpoints are used to keep the product catalog up-to-date.
 High-performance endpoints for storefront integration.
 
 ### Semantic Search
-`POST /{store_id}/search`
+`POST /search/{store_id}`
 
 **Input:**
 * `query_text`: (String) The user's search query.
@@ -44,14 +46,14 @@ High-performance endpoints for storefront integration.
 * `limit`: (Integer, Optional) Default 10.
 
 ### Similar Products
-`POST /{store_id}/similar/{product_id}`
+`POST /search/{store_id}/similar/{product_id}`
 
 **Input:**
 * `filters`: (Object, Optional) Dynamic filters.
 * `limit`: (Integer, Optional) Default 10.
 
 ### Personalized Recommendations
-`POST /{store_id}/recommend`
+`POST /recommend/{store_id}`
 
 **Input:**
 ```json
