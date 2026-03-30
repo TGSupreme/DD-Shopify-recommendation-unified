@@ -14,50 +14,57 @@ logger = logging.getLogger(__name__)
 @router.post("/{store_id}/products", response_model=SyncResponse)
 async def sync_products(store_id: str, products: List[ProductUpsert]):
     """
-    Phase 2 Logic:
-    1. LOG: Start of ingestion for {store_id} with {count} products.
-    2. Vectorize text fields via Jina AI.
+    Standardized Ingestion Logic:
+    1. Extract core text fields for vectorization.
+    2. Prepare flat, indexed payload based on standardized metadata.
     3. Upsert to Qdrant.
     """
     if not products:
         return SyncResponse(status="success", message="No products to sync", count=0)
 
-    # 1. LOG: Start of ingestion
     logger.info(f"INGESTION START: Store={store_id}, ProductCount={len(products)}")
 
     try:
-        # 2. Extract and Prepare text for Jina AI
+        # 1. Prepare text for vectorization
         texts_to_embed = []
         for p in products:
-            source = p.embedding_source
-            tags_str = " ".join(source.tags) if source.tags else ""
-            # Combining fields for a semantic "fingerprint"
+            tags_str = " ".join(p.tags) if p.tags else ""
             combined_text = (
-                f"Title: {source.title}. "
-                f"Brand: {source.brand}. "
-                f"Category: {source.category}. "
-                f"Description: {source.description}. "
+                f"Title: {p.title}. "
+                f"Brand: {p.brand or ''}. "
+                f"Category: {p.category or ''}. "
+                f"Description: {p.description or ''}. "
                 f"Tags: {tags_str}"
             )
             texts_to_embed.append(combined_text)
 
-        # 3. Vectorize text (Logging handled inside service)
+        # 2. Get embeddings
         embeddings = await embedding_service.get_embeddings(texts_to_embed)
 
-        # 4. Prepare Qdrant Points
+        # 3. Prepare Qdrant Points with Standardized Payload
         points = []
         for i, p in enumerate(products):
             point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{p.product_id}"))
             
-            # Enrich metadata with core fields for easier filtering/display
+            # Map only non-None standardized fields to the root payload
             payload = {
                 "store_id": store_id,
                 "product_id": p.product_id,
-                "title": p.embedding_source.title,
-                "brand": p.embedding_source.brand,
-                "category": p.embedding_source.category,
-                "metadata": p.metadata
+                "title": p.title,
+                "description": p.description,
             }
+
+            # Add categorical, numeric, and boolean fields if they exist
+            standard_keys = [
+                "brand", "category", "product_type", "collection", "tags",
+                "color", "size", "material", "gender", "age_group", "season",
+                "price", "discount", "rating", "weight", "is_available"
+            ]
+            
+            for key in standard_keys:
+                val = getattr(p, key)
+                if val is not None:
+                    payload[key] = val
             
             points.append(
                 q_models.PointStruct(
@@ -67,14 +74,13 @@ async def sync_products(store_id: str, products: List[ProductUpsert]):
                 )
             )
 
-        # 5. Upsert to Qdrant (Logging handled inside service)
+        # 4. Upsert
         collection_name = settings.COLLECTION_NAME
-        await qdrant_service.ensure_collection(collection_name)
         await qdrant_service.upsert_products(collection_name, points)
 
         return SyncResponse(
             status="success", 
-            message=f"Successfully synced {len(products)} products", 
+            message=f"Successfully synced {len(products)} products with standardized schema", 
             count=len(products)
         )
 
@@ -84,9 +90,6 @@ async def sync_products(store_id: str, products: List[ProductUpsert]):
 
 @router.delete("/{store_id}/products/{product_id}", response_model=SyncResponse)
 async def delete_product(store_id: str, product_id: str):
-    """
-    Phase 2: Remove a product from the vector space.
-    """
     try:
         point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{product_id}"))
         await qdrant_service.client.delete(

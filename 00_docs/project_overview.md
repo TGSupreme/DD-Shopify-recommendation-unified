@@ -7,7 +7,7 @@ The **Unified Shopify Recommendation Engine** is a next-generation AI-driven pla
 ### 2. Core Capabilities
 The system provides three primary entry points for merchants to enhance their store's user experience:
 
-*   **Semantic Search:** Allows customers to find products based on concepts and descriptions rather than exact keyword matches (e.g., searching for "summer party outfit" and finding relevant floral dresses and sandals).
+*   **Semantic Search:** Allows customers to find products based on concepts and descriptions rather than exact keyword matches.
 *   **Similar Products:** Automatically identifies and displays products that are conceptually related to the one a customer is currently viewing.
 *   **Personalized Recommendations:** Generates a unique list of products for every visitor based on their specific interaction history (Views, Cart Additions, and Purchases).
 
@@ -15,16 +15,15 @@ The system provides three primary entry points for merchants to enhance their st
 
 ### 3. How It Works: The "Semantic" Advantage
 
-#### A. Structured Ingestion with Flexible Metadata
-To integrate a store, the system requires a hybrid data approach to ensure both high-quality AI understanding and maximum merchant flexibility:
+#### A. Structured Ingestion with Standardized Metadata
+To ensure maximum performance and predictable filtering, the system uses a **Standardized Flat Schema**. Merchants map their product data to a set of "First-Class" attributes that are natively indexed for sub-millisecond retrieval.
 
 1.  **Core Identity:** `store_id` and `product_id`.
-2.  **Core Product Attributes (Mandatory):** Text fields used as input to generate the **Product Vector** (Title, Description, Category, Brand, and Tags). These are processed by a pre-trained AI model to create the mathematical representation of the product.
-3.  **Extended Metadata (Optional & Schema-less):** Any additional JSON data the store wishes to provide (Price, Discount, Availability, Material, etc.).
+2.  **Core Product Attributes (Mandatory):** Text fields used to generate the **Product Vector** (Title, Description, Brand, Category, and Tags).
+3.  **Standardized Commerce Attributes (Optional):** High-probability keys like `price`, `discount`, `color`, `size`, `material`, `gender`, `season`, and `is_available`.
 
-*   **Semantic Intelligence:** By requiring core text fields, the system ensures that every product has a high-quality "Digital Fingerprint" in the vector space.
-*   **"Bring Your Own Schema" (BYOS) Filtering:** Because the extended metadata is treated as an opaque object, merchants can filter recommendations using their own custom attributes (e.g., "Filter by `color: 'Red'`") without any backend configuration changes.
-*   **Data Privacy & Isolation:** Every store’s data is kept within a shared "Collection," but isolated using a unique Store ID as a **partition key** (Tenant Indexing). This ensures strict separation and no data leakage between merchants while providing superior database performance at scale.
+*   **Performance First:** Every standardized field has a dedicated Qdrant payload index (Keyword, Range, or Boolean), ensuring that filtering never requires a slow "full-scan" of the data.
+*   **Data Privacy & Isolation:** Every store’s data is kept within a shared collection but isolated using a unique Store ID as a **partition key** (Tenant Indexing). This ensures strict separation and superior database performance at scale.
 
 #### B. The Weighted Recommendation Logic
 Our "User Interest" engine calculates what a customer wants by looking at their journey across three tiers of intent:
@@ -33,21 +32,19 @@ Our "User Interest" engine calculates what a customer wants by looking at their 
 2.  **Added to Cart (Medium Weight):** High intent for immediate purchase.
 3.  **Viewed Products (Low Weight):** General interest and browsing "vibe."
 
-By combining the vectors of these products, the system calculates a **"User Interest Vector."** It then finds the products in the store's catalog that are mathematically closest to this vector, delivering a highly personalized shopping experience.
+By combining the vectors of these products, the system calculates a **"User Interest Vector"** to find the most relevant matches in the store's catalog.
 
 ---
 
 ### 4. Technical Architecture Highlights
-*   **High Performance:** Built on **FastAPI**, ensuring ultra-low latency for real-time recommendations even during high-traffic sales events.
-*   **Vector Engine (Qdrant):** We use **Qdrant** as our core vector database. It was chosen for its:
-    *   **Advanced Payload Filtering:** Allows for extremely fast filtering using the store's custom JSON metadata (BYOS) without sacrificing search performance.
-    *   **Native Multi-tenancy:** Uses a dedicated **Tenant Index** to ensure that every Shopify store's data is strictly isolated and secure.
-    *   **Scalability:** Optimized for high-throughput environments, making it ideal for the high-volume traffic patterns of e-commerce.
-*   **Seamless Integration:** Designed as a "plug-and-play" system that can be integrated into any Shopify storefront via a standard API.
+*   **High Performance:** Built on **FastAPI**, ensuring ultra-low latency for real-time recommendations.
+*   **Vector Engine (Qdrant):** Uses native **Tenant Indexing** and **Query Points** API for optimized multi-tenant search.
+*   **Embedding Service:** Leverages **Jina AI** for high-quality semantic representations of product data.
+*   **Startup Initialization:** The system pre-validates connections and initializes all required indexes at server startup, ensuring immediate readiness.
 
 ---
 
 ### 5. Business Impact
-*   **Increased Conversion:** By showing customers exactly what they are looking for (even if they don't know the name of it).
-*   **Higher Average Order Value (AOV):** Through "Frequently Bought Together" and "Similar Product" suggestions that feel relevant, not random.
-*   **Future-Proof:** As the store grows and more data is added, the semantic model becomes even more accurate without requiring manual rule-tuning.
+*   **Increased Conversion:** By showing customers exactly what they are looking for through semantic understanding.
+*   **Higher Average Order Value (AOV):** Through relevant "Similar Product" and personalized suggestions.
+*   **Scalable & Reliable:** Optimized for high-throughput environments with a strict, high-performance schema.

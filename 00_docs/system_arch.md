@@ -5,60 +5,60 @@ This document provides a deep dive into the technical architecture, component in
 ---
 
 ## 1. High-Level Architecture
-The system is built as a cloud-native, high-performance microservice designed for real-time e-commerce personalization.
+The system is built as a high-performance microservice designed for real-time e-commerce personalization and discovery.
 
 ### Core Components
 1.  **FastAPI Application:** The entry point for all storefront and administrative requests. Handles request validation, orchestration, and business logic.
-2.  **Embedding Service (Direct API via `httpx`):** Transforms raw product text (Title, Description, etc.) into high-dimensional vectors (embeddings). This uses Jina's API-based models (e.g., `jina-embeddings-v2-base-en`) via direct HTTP requests, ensuring high-quality semantic representations with minimal overhead and maximum scalability.
-3.  **Qdrant Vector Database:** The storage and search engine. Manages high-dimensional vectors and associated metadata, providing extremely fast similarity searches.
-4.  **Shopify Integration Layer:** Future component (planned) to handle OAuth and Webhook-based data synchronization.
+2.  **Embedding Service:** Transforms raw product text into high-dimensional vectors (768-dim) using Jina's API-based models.
+3.  **Qdrant Vector Database:** The storage and search engine. Manages high-dimensional vectors and associated standardized metadata, providing extremely fast similarity searches via the `query_points` API.
 
 ---
 
-## 2. Data Ingestion & Synchronization Flow
-To maintain a high-quality "Digital Fingerprint" for every product, the ingestion process follows a strict pipeline:
+## 2. Standardized Data Ingestion Pipeline
+To maintain a high-quality "Digital Fingerprint" for every product, the ingestion process follows a strict, high-performance pipeline:
 
-1.  **Request:** Merchant sends product data via `POST /sync/{store_id}/products`.
-2.  **Vectorization:** The system extracts the `embedding_source` fields (Title, Description, Tags) and generates a single normalized vector.
-3.  **Payload Preparation:** The vector is paired with the product ID and the "opaque" `metadata` object (Price, Color, etc.).
-4.  **Storage:** The vector and payload are upserted into the Qdrant collection associated with the `store_id`.
+1.  **Request:** Merchant sends product data via `POST /sync/{store_id}/products` using a **Standardized Flat Schema**.
+2.  **Vectorization:** The system extracts the core text fields (`title`, `description`, `brand`, `category`, `tags`) to generate a single normalized vector.
+3.  **Standardized Payload:** Only the pre-defined categorical, numeric, and state fields are accepted and stored as root-level payload attributes.
+4.  **Storage:** The vector and payload are upserted into the shared Qdrant collection, partitioned by `store_id`.
 
 ---
 
 ## 3. The Recommendation Logic (Weighted Vector Math)
-The "User Interest Vector" ($\vec{V}_{user}$) is the heart of the personalization engine. It represents a customer's current preference in the product vector space.
+The personalization engine represents a customer's current preference in the product vector space using a "User Interest Vector".
 
-### Implementation: Qdrant Recommend API
-The system leverages Qdrant's native `recommend` endpoint with the `average_vector` strategy:
-*   **Weighted Input:** Interaction weights (5, 3, 1) are applied by repeating product IDs in the `positive` points list.
-*   **Efficiency:** This approach offloads the vector averaging and similarity search to the database engine, ensuring sub-millisecond response times and native support for dynamic payload filters.
-
----
-
-## 4. Multi-tenancy & Data Isolation
-Security is a primary concern. The system ensures that Store A can never access Store B's data:
-
-*   **Logical Isolation:** Every request requires a `store_id`.
-*   **Vector Isolation:** Qdrant is configured to use a single collection (defined by `COLLECTION_NAME`) with the `store_id` as a partition key (Tenant Indexing). This ensures that searches are strictly scoped to a single merchant's catalog at the database level while maintaining high efficiency across many stores.
-*   **Performance Indexing:** To ensure sub-millisecond filtering, the following payload indexes are automatically created upon collection initialization:
-    *   **Tenant Index:** `store_id` (Keyword index with `is_tenant=True`).
-    *   **Core Keyword Indexes:** `product_id`, `brand`, and `category`.
-    *   **Metadata Filtering:** Opaque `metadata` fields are filtered dynamically after the tenant partition is applied.
+### Implementation: Weighted Recommendation
+*   **Interaction Weights:** Interaction weights are applied based on customer behavior:
+    *   **Purchased (High):** Weight 5.0
+    *   **Cart (Medium):** Weight 3.0
+    *   **Viewed (Low):** Weight 1.0
+*   **Vector Search:** The system uses the Qdrant `recommend` API or custom vector averaging to find the closest products in the merchant's partition.
 
 ---
 
-## 5. Filtering Strategy (BYOS - Bring Your Own Schema)
-The engine supports dynamic filtering on merchant-defined metadata without requiring pre-defined database schemas:
+## 4. Multi-tenancy & Performance Indexing
+Security and speed are achieved through native Qdrant multi-tenancy and automatic indexing:
 
-*   **Dynamic Payload Filtering:** Filters provided in the API request (e.g., `color: ["Blue"]`) are translated directly into Qdrant payload filters.
-*   **Logic:**
-    *   **Arrays:** Treated as an "OR" operation (match any value in the list).
-    *   **Objects (Min/Max):** Translated into range queries for numerical data.
-    *   **Multiple Keys:** Treated as an "AND" operation (all conditions must be met).
+*   **Tenant Isolation:** `store_id` is used as a mandatory partition key.
+*   **Automatic Startup Indexing:** On server startup, the system ensures all standardized commerce fields have corresponding payload indexes:
+    *   **Keyword Indexes:** `brand`, `category`, `color`, `size`, `material`, `gender`, `season`, `tags`.
+    *   **Range Indexes:** `price`, `discount`, `rating`, `weight`.
+    *   **Boolean Index:** `is_available`.
+*   **HNSW Optimization:** Configured for sub-millisecond search times with per-tenant sub-indexes.
 
 ---
 
-## 6. Performance & Scalability
-*   **Asynchronous Processing:** FastAPI utilizes Python's `async/await` for non-blocking I/O operations with Qdrant.
-*   **Horizontal Scaling:** The API layer is stateless and can be scaled horizontally behind a load balancer.
-*   **Vector Indexing:** Qdrant uses HNSW (Hierarchical Navigable Small World) indexing to provide sub-millisecond search times even with millions of products.
+## 5. Filtering Strategy (Strict Schema)
+The engine strictly enforces a standardized schema to guarantee performance:
+
+*   **Logic Mapping:**
+    *   **Arrays:** Treated as "Match Any" (OR) within a single field.
+    *   **Objects (Min/Max):** Translated into range queries for numeric data.
+    *   **Standard Fields:** All filters are executed against root-level indexed fields, avoiding slow JSON-traversal.
+
+---
+
+## 6. System Lifecycle Management
+The application utilizes FastAPI's **lifespan** context to manage resources:
+*   **Startup:** Pre-initializes the collection and all 15+ payload indexes. Validates Qdrant connectivity.
+*   **Shutdown:** Gracefully closes the Qdrant client and other persistent connections.

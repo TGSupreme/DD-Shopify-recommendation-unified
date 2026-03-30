@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from models.schemas import SearchRequest, SearchResponse, ProductResponse
+from models.schemas import SearchRequest, SimilarRequest, SearchResponse, ProductResponse
 from services.embedding import embedding_service
 from services.qdrant import qdrant_service
 from utils.filters import translate_filters
@@ -51,7 +51,7 @@ async def semantic_search(store_id: str, request: SearchRequest):
         raise HTTPException(status_code=500, detail="Search operation failed.")
 
 @router.post("/{store_id}/similar/{product_id}", response_model=SearchResponse)
-async def similar_products(store_id: str, product_id: str, request: SearchRequest):
+async def similar_products(store_id: str, product_id: str, request: SimilarRequest):
     """
     Finds products similar to a specific product_id.
     """
@@ -73,15 +73,13 @@ async def similar_products(store_id: str, product_id: str, request: SearchReques
         # 2. Translate filters
         q_filter = translate_filters(store_id, request.filters)
 
-        # 3. Search using product vector, excluding the target product itself
-        query_response = await qdrant_service.client.query_points(
+        # 3. Search using product vector
+        hits = await qdrant_service.search_products(
             collection_name=settings.COLLECTION_NAME,
-            query=target_vector,
+            query_vector=target_vector,
             query_filter=q_filter,
-            limit=(request.limit or settings.TOP_K) + 1,
-            score_threshold=0.1
+            limit=(request.limit or settings.TOP_K) + 5 # Fetch slightly more to account for self-exclusion
         )
-        hits = query_response.points
 
         # 4. Format results and exclude self
         results = [
