@@ -55,6 +55,10 @@ async def root():
     logger.info("Root endpoint accessed.")
     return {"message": "Unified Shopify Recommendation Engine API is running - Standardized Multi-tenant Core Active"}
 
+@app.get("/ping")
+async def ping():
+    return {"message" : "Server is alive."}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
