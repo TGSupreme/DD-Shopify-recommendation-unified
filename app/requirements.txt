@@ -4,3 +4,4 @@ qdrant-client
 pydantic-settings
 python-dotenv
 httpx
+slowapi

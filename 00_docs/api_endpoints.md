@@ -86,8 +86,16 @@ High-performance endpoints for storefront integration.
 
 ---
 
-## 4. Standardized Filtering Logic
-Filters now target the root-level indexed fields for sub-millisecond performance:
-1.  **OR Logic (Within a Key):** `{"brand": ["Nike", "Adidas"]}` matches either brand.
-2.  **AND Logic (Across Keys):** `{"brand": ["Nike"], "color": "Red"}` must satisfy both.
-3.  **Range Logic:** `{"price": {"min": 50, "max": 150}}` for numeric fields.
+## 5. Tenant-Based Rate Limiting
+To ensure fair resource allocation and protect against abuse, the system enforces a tenant-based rate-limiting policy:
+
+*   **Storefront Discovery (`/search`, `/recommend`):**
+    *   **Rate:** 300 requests per minute (Default).
+    *   **Enforcement:** Per **StoreID**.
+    *   **Goal:** Protects AI resources while allowing high-volume traffic from central backends.
+*   **Synchronization API (`/sync`):**
+    *   **Rate:** 20 requests per minute (Default).
+    *   **Enforcement:** Per **StoreID**.
+    *   **Goal:** Regulates merchant-level batch ingestion.
+
+When a limit is exceeded, the API returns a `429 Too Many Requests` status code.

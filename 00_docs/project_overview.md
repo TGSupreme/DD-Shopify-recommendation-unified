@@ -40,6 +40,7 @@ By combining the vectors of these products, the system calculates a **"User Inte
 *   **High Performance:** Built on **FastAPI**, ensuring ultra-low latency for real-time recommendations.
 *   **Vector Engine (Qdrant):** Uses native **Tenant Indexing** and **Query Points** API for optimized multi-tenant search.
 *   **Embedding Service:** Leverages **Jina AI** for high-quality semantic representations of product data.
+*   **Hybrid Rate Limiting:** Implements specialized quotas for shoppers (IP + StoreID) and merchants (StoreID-only), protecting expensive AI resources from abuse.
 *   **Startup Initialization:** The system pre-validates connections and initializes all required indexes at server startup, ensuring immediate readiness.
 
 ---

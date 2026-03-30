@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     VECTOR_DIMENSION: int = 768
     TOP_K: int = 10
     
+    # Rate Limiting (Tenant-Only)
+    RATE_LIMIT_STOREFRONT: str = "300/minute"  # store_id based (5 req/sec)
+    RATE_LIMIT_SYNC: str = "20/minute"         # store_id based
+
+    
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()

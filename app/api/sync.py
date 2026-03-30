@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from typing import List
 from models.schemas import ProductUpsert, SyncResponse
 from services.embedding import embedding_service
 from services.qdrant import qdrant_service
 from qdrant_client.http import models as q_models
 from core.config import settings
+from utils.limiter import limiter, get_store_only_key
 import logging
 import uuid
 
@@ -12,7 +13,8 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 @router.post("/{store_id}/products", response_model=SyncResponse)
-async def sync_products(store_id: str, products: List[ProductUpsert]):
+@limiter.limit(settings.RATE_LIMIT_SYNC, key_func=get_store_only_key)
+async def sync_products(request: Request, store_id: str, products: List[ProductUpsert]):
     """
     Standardized Ingestion Logic:
     1. Extract core text fields for vectorization.
@@ -89,7 +91,8 @@ async def sync_products(store_id: str, products: List[ProductUpsert]):
         raise HTTPException(status_code=500, detail="Data synchronization failed.")
 
 @router.delete("/{store_id}/products/{product_id}", response_model=SyncResponse)
-async def delete_product(store_id: str, product_id: str):
+@limiter.limit(settings.RATE_LIMIT_SYNC, key_func=get_store_only_key)
+async def delete_product(request: Request, store_id: str, product_id: str):
     try:
         point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{product_id}"))
         await qdrant_service.client.delete(

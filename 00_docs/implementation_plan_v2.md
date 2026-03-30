@@ -37,7 +37,15 @@ This document outlines the high-performance roadmap for the **Unified Shopify Re
 
 ---
 
-## Phase 5: Advanced Ranking & Sorting [PLANNED]
+## Phase 5: Tenant-Only Rate Limiting [COMPLETED]
+*   **Central Backend Support:** Shifted from hybrid to **StoreID-only** limiting to support requests from a single central backend.
+*   **Storefront Quota:** Increased to **300 req/min** to handle high shopper traffic across stores.
+*   **Sync API Quota:** Increased to **20 req/min** for faster bulk data synchronization.
+*   **Middleware Integration:** Global exception handling for `429` errors.
+
+---
+
+## Phase 6: Advanced Ranking & Sorting [PLANNED]
 *   **Dynamic Sorting:** Adding the ability to sort discovery results by:
     *   `price` (ASC/DESC)
     *   `rating` (DESC)

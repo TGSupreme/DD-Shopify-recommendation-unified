@@ -6,6 +6,9 @@ from api.search import router as search_router
 from api.recommend import router as recommend_router
 from services.qdrant import qdrant_service
 from core.config import settings
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from utils.limiter import limiter
 
 # Configure Structured Logging
 logging.basicConfig(
@@ -19,15 +22,17 @@ logger = logging.getLogger("main")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # STARTUP: Pre-initialize Qdrant Collection and Indexes
     logger.info("SYSTEM STARTUP: Validating Qdrant Connection...")
     try:
         await qdrant_service.ensure_collection(settings.COLLECTION_NAME)
         logger.info(f"SYSTEM READY: Shared collection '{settings.COLLECTION_NAME}' is active and optimized.")
     except Exception as e:
         logger.error(f"SYSTEM CRITICAL: Failed to initialize Qdrant at startup: {str(e)}")
-
+    
     yield
-
+    
+    # SHUTDOWN: Clean up resources if needed
     logger.info("SYSTEM SHUTDOWN: Closing connections...")
     await qdrant_service.client.close()
 
@@ -35,6 +40,10 @@ app = FastAPI(
     title="Unified Shopify Recommendation Engine",
     lifespan=lifespan
 )
+
+# Initialize Limiter
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Register Routers
 app.include_router(sync_router, prefix="/sync", tags=["Sync"])
