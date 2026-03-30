@@ -17,3 +17,16 @@ class SyncResponse(BaseModel):
     status: str
     message: str
     count: Optional[int] = 0
+
+class SearchRequest(BaseModel):
+    query_text: Optional[str] = None
+    filters: Optional[Dict[str, Any]] = {}
+    limit: Optional[int] = 10
+
+class ProductResponse(BaseModel):
+    product_id: str
+    score: float
+
+class SearchResponse(BaseModel):
+    status: str
+    results: List[ProductResponse]

@@ -83,4 +83,29 @@ class QdrantService:
             logger.error(f"Qdrant Upsert FAILURE: {str(e)}")
             raise
 
+    async def search_products(
+        self, 
+        collection_name: str, 
+        query_vector: List[float], 
+        query_filter: models.Filter,
+        limit: int = 10
+    ) -> List[models.ScoredPoint]:
+        """
+        Executes a vector similarity search within the store's partition.
+        """
+        try:
+            results = await self.client.query_points(
+                collection_name=collection_name,
+                query=query_vector,
+                query_filter=query_filter,
+                limit=limit,
+                score_threshold=0.1
+            )
+            # results for query_points is QueryResponse, we want the points
+            logger.info(f"Qdrant Query SUCCESS: Found {len(results.points)} matches")
+            return results.points
+        except Exception as e:
+            logger.error(f"Qdrant Query FAILURE: {str(e)}")
+            raise
+
 qdrant_service = QdrantService()

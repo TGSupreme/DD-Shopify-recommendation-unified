@@ -34,7 +34,7 @@ These endpoints are used to keep the product catalog up-to-date.
 
 ---
 
-## 2. Discovery Engine
+## 2. Discovery Engine (`/search`)
 High-performance endpoints for storefront integration.
 
 ### Semantic Search
@@ -42,8 +42,18 @@ High-performance endpoints for storefront integration.
 
 **Input:**
 * `query_text`: (String) The user's search query.
-* `filters`: (Object, Optional) Dynamic filters.
+* `filters`: (Object, Optional) Dynamic filters (BYOS).
 * `limit`: (Integer, Optional) Default 10.
+
+**Response:**
+```json
+{
+  "status": "success",
+  "results": [
+    { "product_id": "id1", "score": 0.89 }
+  ]
+}
+```
 
 ### Similar Products
 `POST /search/{store_id}/similar/{product_id}`
@@ -51,6 +61,11 @@ High-performance endpoints for storefront integration.
 **Input:**
 * `filters`: (Object, Optional) Dynamic filters.
 * `limit`: (Integer, Optional) Default 10.
+
+---
+
+## 3. Personalization Engine (`/recommend`)
+*(Phase 3 - In Progress)*
 
 ### Personalized Recommendations
 `POST /recommend/{store_id}`
@@ -71,7 +86,7 @@ High-performance endpoints for storefront integration.
 
 ---
 
-## 3. Advanced Filtering Syntax (BYOS)
+## 4. Advanced Filtering Syntax (BYOS)
 The `filters` object uses a **"Match Any, Satisfy All"** logic:
 1.  **OR Logic (Within a Key):** Providing an array of values for a single key will match products that have *any* of those values.
 2.  **AND Logic (Across Keys):** All keys provided in the `filters` object must be satisfied for a product to be returned.
@@ -85,19 +100,3 @@ The `filters` object uses a **"Match Any, Satisfy All"** logic:
 }
 ```
 *Resulting Query:* `(Color is Red OR Blue) AND (Size is XL) AND (Price is 20-100)`
-
----
-
-## 4. System Configuration
-The following parameters are managed via **Environment Variables** for global consistency:
-
-| Variable | Description | Recommended Value |
-| :--- | :--- | :--- |
-| `COLLECTION_NAME` | The default Qdrant collection for products | `products` |
-| `WEIGHT_VIEW` | Influence of viewed products | 1.0 |
-| `WEIGHT_CART` | Influence of added-to-cart products | 3.0 |
-| `WEIGHT_PURCHASE` | Influence of purchased products | 5.0 |
-| `VECTOR_DIMENSION` | Dimension of the embedding model | (e.g., 384 or 768) |
-| `TOP_K` | Default number of results for discovery | 10 |
-| `JINA_API_KEY` | API key for Jina AI embeddings | (Required) |
-| `QDRANT_URL` | URL for the Qdrant instance | (Required) |
