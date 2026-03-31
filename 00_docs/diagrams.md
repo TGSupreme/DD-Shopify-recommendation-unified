@@ -1,47 +1,161 @@
-# Project Architecture & Logic Diagrams
+# Project Architecture & UML Diagrams
 
 This document contains the visual representations of the **Unified Shopify Recommendation Engine** using [Mermaid.js](https://mermaid.js.org/).
 
 ---
 
-### 1. High-Level System Workflow (Flowchart)
-This diagram shows the general flow of data from ingestion to recommendation.
+### 1. Component Architecture
+Shows the high-level interaction between the core system components and external AI services.
 
 ```mermaid
-graph TD
-    A[Shopify Store] -->|1. Ingest Products| B(FastAPI Service)
-    B -->|2. Vectorize| C{Embedding Model}
-    C -->|3. Store Vectors + Metadata| D[(Vector Database)]
+componentDiagram
+    [Shopify Store] as Store
     
-    E[Customer Interaction] -->|4. Request Recommendations| B
-    B -->|5. Weighted Calculation| F[User Interest Vector]
-    F -->|6. Search| D
-    D -->|7. Recommended Products| B
-    B -->|8. Return Results| A
+    package "FastAPI Application" {
+        [Sync API] as Sync
+        [Search API] as Search
+        [Recommend API] as Recommend
+        [Qdrant Service] as QService
+        [Embedding Service] as EService
+    }
+    
+    database "Qdrant VDB" {
+        [Shared Collection] as Collection
+        [Nested Metadata Index] as MetaIndex
+        [Tenant Index (store_id)] as TenantIndex
+    }
+    
+    cloud "Jina AI" {
+        [Embedding API] as Jina
+    }
+
+    Store --> Sync
+    Store --> Search
+    Store --> Recommend
+    
+    Sync --> EService : Vectorize Search Core
+    Sync --> QService : Upsert Points
+    
+    Search --> EService : Vectorize Query
+    Search --> QService : Query Points
+    
+    Recommend --> QService : Weighted Recommend
+    
+    EService --> Jina : HTTPS/REST
+    QService --> Collection : gRPC/REST
 ```
 
 ---
 
-### 2. Recommendation Sequence (Sequence Diagram)
-This diagram illustrates the step-by-step logic of a recommendation request.
+### 2. Data Model (Class Diagram)
+Represents the **Tri-tier Structured Design** and the relationships between identity, search core, and metadata.
+
+```mermaid
+classDiagram
+    class ProductUpsert {
+        +String product_id
+        +String title
+        +String description
+        +String brand
+        +String category
+        +List~String~ tags
+        +ProductMetadata metadata
+    }
+    
+    class ProductMetadata {
+        +Float price
+        +Float discount
+        +Float rating
+        +Float weight
+        +String color
+        +String size
+        +String material
+        +String gender
+        +String season
+        +String collection
+        +Boolean is_available
+    }
+    
+    class RecommendRequest {
+        +List~String~ viewed_ids
+        +List~String~ added_to_cart_ids
+        +List~String~ purchased_ids
+        +Dict filters
+        +Int limit
+    }
+    
+    ProductUpsert *-- ProductMetadata : contains
+```
+
+---
+
+### 3. Standardized Ingestion Flow (Sequence Diagram)
+Illustrates the process of syncing products with the specialized Search Core vs. Metadata split.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Store as Shopify Store
-    participant API as FastAPI Engine
-    participant VDB as Vector Database
+    participant Merchant
+    participant API as FastAPI (Sync)
+    participant Jina as Jina AI (Embeddings)
+    participant Qdrant as Qdrant VDB
 
-    Store->>API: GET /recommend (User History)
-    Note over API: Apply Weights (Purchased > Cart > Viewed)
-    API->>VDB: Query Nearest Neighbors
-    VDB-->>API: Top K Matches
-    API-->>Store: JSON Recommendations
+    Merchant->>API: POST /sync (Tri-tier JSON)
+    Note over API: Extract Search Core (Title, Brand, Cat, Tags)
+    API->>Jina: Request 768-dim Vectors
+    Jina-->>API: Returning Embeddings
+    Note over API: Map Commerce Metadata to nested object
+    API->>Qdrant: Upsert Points (Vector + Nested Payload)
+    Qdrant-->>API: Success
+    API-->>Merchant: SyncResponse (Count)
 ```
 
 ---
 
-### 3. How to View and Edit These Diagrams
-*   **VS Code:** Install the **"Markdown Preview Mermaid Support"** extension to see these diagrams live.
-*   **GitHub/GitLab:** These diagrams are rendered automatically in the web interface.
-*   **Mermaid Live Editor:** You can copy-paste the code blocks into [Mermaid.live](https://mermaid.live/) to export them as PNG/SVG.
+### 4. Personalized Recommendation Logic (Sequence Diagram)
+Shows the weighted interaction logic and the validation against the index.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Shopper
+    participant API as FastAPI (Recommend)
+    participant QService as Qdrant Service
+    participant Qdrant as Qdrant VDB
+
+    Shopper->>API: POST /recommend (User History)
+    API->>QService: get_personalized_recommendations()
+    
+    rect rgb(240, 240, 240)
+        Note over QService: Step 1: ID Validation
+        QService->>Qdrant: retrieve(IDs)
+        Qdrant-->>QService: Existing Points
+    end
+
+    rect rgb(240, 240, 240)
+        Note over QService: Step 2: Apply Weights
+        Note over QService: Viewed(1x), Cart(3x), Purchased(5x)
+    end
+    
+    QService->>Qdrant: recommend(Weighted Positive IDs + Filters)
+    Qdrant-->>QService: Scored Matches
+    QService-->>API: Results
+    API-->>Shopper: JSON Suggestions
+```
+
+---
+
+### 5. Multi-tenant Filtering Logic
+Shows how the system automatically maps merchant filters to the nested metadata.
+
+```mermaid
+graph LR
+    A[Merchant Filter: 'price' < 100] --> B{translate_filters}
+    C[Merchant Filter: 'brand' = 'Nike'] --> B
+    
+    B --> D[Qdrant Filter: 'metadata.price' < 100]
+    B --> E[Qdrant Filter: 'brand' = 'Nike']
+    
+    style D fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#ccf,stroke:#333,stroke-width:2px
+```
