@@ -9,6 +9,7 @@ from core.config import settings
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from utils.limiter import limiter
+from fastapi.responses import PlainTextResponse
 
 # Configure Structured Logging
 logging.basicConfig(
@@ -55,9 +56,9 @@ async def root():
     logger.info("Root endpoint accessed.")
     return {"message": "Unified Shopify Recommendation Engine API is running - Standardized Multi-tenant Core Active"}
 
-@app.get("/ping")
+@app.get("/ping",response_class=PlainTextResponse)
 async def ping():
-    return {"message" : "Server is alive."}
+    return "Server is alive."
 
 if __name__ == "__main__":
     import uvicorn
