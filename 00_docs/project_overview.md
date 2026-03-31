@@ -13,39 +13,27 @@ The system provides three primary entry points for merchants to enhance their st
 
 ---
 
-### 3. How It Works: The "Semantic" Advantage
+### 3. How It Works: The "Tri-tier" Schema
+To ensure maximum performance and logical separation of concerns, the system uses a **Tri-tier Structured Design**.
 
-#### A. Structured Ingestion with Standardized Metadata
-To ensure maximum performance and predictable filtering, the system uses a **Standardized Flat Schema**. Merchants map their product data to a set of "First-Class" attributes that are natively indexed for sub-millisecond retrieval.
+#### A. Core Identity
+*   `store_id`: The mandatory partition key for tenant isolation.
+*   `product_id`: The unique identifier for the product within a store.
 
-1.  **Core Identity:** `store_id` and `product_id`.
-2.  **Core Product Attributes (Mandatory):** Text fields used to generate the **Product Vector** (Title, Description, Brand, Category, and Tags).
-3.  **Standardized Commerce Attributes (Optional):** High-probability keys like `price`, `discount`, `color`, `size`, `material`, `gender`, `season`, and `is_available`.
+#### B. Search Core (Top-level Vector Basis)
+These fields define the "Digital Fingerprint" of the product and are used to generate the **Product Vector** via Jina AI.
+*   `title`, `description`, `brand`, `category`, and `tags`.
 
-*   **Performance First:** Every standardized field has a dedicated Qdrant payload index (Keyword, Range, or Boolean), ensuring that filtering never requires a slow "full-scan" of the data.
-*   **Data Privacy & Isolation:** Every store’s data is kept within a shared collection but isolated using a unique Store ID as a **partition key** (Tenant Indexing). This ensures strict separation and superior database performance at scale.
-
-#### B. The Weighted Recommendation Logic
-Our "User Interest" engine calculates what a customer wants by looking at their journey across three tiers of intent:
-
-1.  **Purchased Products (High Weight):** The strongest signal of long-term preference.
-2.  **Added to Cart (Medium Weight):** High intent for immediate purchase.
-3.  **Viewed Products (Low Weight):** General interest and browsing "vibe."
-
-By combining the vectors of these products, the system calculates a **"User Interest Vector"** to find the most relevant matches in the store's catalog.
+#### C. Commerce Metadata (Nested Filter Basis)
+Attributes used for business logic, filtering, and real-time state management are grouped into a nested `metadata` object. This ensures the Search Core remains clean.
+*   **Numeric:** `price`, `discount`, `rating`, `weight`.
+*   **Categorical:** `color`, `size`, `material`, `gender`, `season`, `collection`.
+*   **State:** `is_available`.
 
 ---
 
 ### 4. Technical Architecture Highlights
-*   **High Performance:** Built on **FastAPI**, ensuring ultra-low latency for real-time recommendations.
-*   **Vector Engine (Qdrant):** Uses native **Tenant Indexing** and **Query Points** API for optimized multi-tenant search.
-*   **Embedding Service:** Leverages **Jina AI** for high-quality semantic representations of product data.
-*   **Hybrid Rate Limiting:** Implements specialized quotas for shoppers (IP + StoreID) and merchants (StoreID-only), protecting expensive AI resources from abuse.
-*   **Startup Initialization:** The system pre-validates connections and initializes all required indexes at server startup, ensuring immediate readiness.
-
----
-
-### 5. Business Impact
-*   **Increased Conversion:** By showing customers exactly what they are looking for through semantic understanding.
-*   **Higher Average Order Value (AOV):** Through relevant "Similar Product" and personalized suggestions.
-*   **Scalable & Reliable:** Optimized for high-throughput environments with a strict, high-performance schema.
+*   **Nested Indexing:** Qdrant utilizes native nested payload indexing (e.g., `metadata.price`) for sub-millisecond filtering.
+*   **Weighted User Intent:** Calculates a **"User Interest Vector"** by weighting interactions (Purchased: 5.0, Cart: 3.0, Viewed: 1.0).
+*   **High Performance:** Built on **FastAPI** and **Qdrant**, optimized for real-time storefront environments.
+*   **Tenant Isolation:** Strict data separation using mandatory partition keys.

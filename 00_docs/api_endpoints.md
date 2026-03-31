@@ -3,34 +3,37 @@
 This document outlines the available endpoints for the **Unified Shopify Recommendation Engine**.
 
 ## 1. Data Synchronization (`/sync`)
-These endpoints are used to keep the product catalog up-to-date using a standardized, high-performance schema.
+Keep the product catalog up-to-date using the standardized Tri-tier schema.
 
 ### Upsert Products
 `POST /sync/{store_id}/products`
 
-**Payload (Flat Schema):**
+**Payload (Tri-tier Schema):**
 ```json
 [
   {
-    "product_id": "gid://shopify/Product/123",
-    "title": "Classic Denim Jacket",
-    "description": "Premium vintage denim...",
-    "brand": "Levi's",
+    "product_id": "UT-001",
+    "title": "Maverick Denim Jacket",
+    "description": "Classic denim...",
+    "brand": "Urban Threadworks",
     "category": "Outerwear",
-    "product_type": "Trucker Jacket",
-    "collection": "Spring 2026",
-    "tags": ["denim", "blue"],
-    "price": 89.50,
-    "is_available": true,
-    "color": "Indigo",
-    "size": "L"
+    "tags": ["denim", "vintage"],
+    "metadata": {
+      "price": 89.50,
+      "color": "Indigo",
+      "size": "L",
+      "is_available": true
+    }
   }
 ]
 ```
-*Note: All fields except `product_id` and `title` are optional.*
 
 ### Delete Product
 `DELETE /sync/{store_id}/products/{product_id}`
+
+### Debug Product (Development)
+`GET /sync/{store_id}/debug/{product_id}`
+Returns the full raw Qdrant point (payload + vector preview) for validation.
 
 ---
 
@@ -42,7 +45,7 @@ High-performance endpoints for storefront integration.
 
 **Input:**
 * `query_text`: (String) The user's search query.
-* `filters`: (Object, Optional) Standardized filters (e.g., `{"brand": ["Nike"], "price": {"max": 100}}`).
+* `filters`: (Object, Optional) Standardized filters. Keys not in Search Core are automatically mapped to `metadata`.
 * `limit`: (Integer, Optional) Default 10.
 
 **Response:**
@@ -58,14 +61,9 @@ High-performance endpoints for storefront integration.
 ### Similar Products
 `POST /search/{store_id}/similar/{product_id}`
 
-**Input:**
-* `filters`: (Object, Optional) Standardized filters.
-* `limit`: (Integer, Optional) Default 10.
-
 ---
 
 ## 3. Personalization Engine (`/recommend`)
-*(Phase 3 - Implementation Pending)*
 
 ### Personalized Recommendations
 `POST /recommend/{store_id}`
@@ -75,10 +73,10 @@ High-performance endpoints for storefront integration.
 {
   "viewed_ids": ["id1", "id2"],
   "added_to_cart_ids": ["id3"],
-  "purchased_ids": ["id4", "id5"],
+  "purchased_ids": ["id4"],
   "filters": {
     "price": {"min": 10, "max": 500},
-    "color": ["Blue"]
+    "is_available": true
   },
   "limit": 12
 }
@@ -86,16 +84,8 @@ High-performance endpoints for storefront integration.
 
 ---
 
-## 5. Tenant-Based Rate Limiting
-To ensure fair resource allocation and protect against abuse, the system enforces a tenant-based rate-limiting policy:
+## 4. Tenant-Based Rate Limiting
+Enforced per **StoreID** to protect AI resources:
 
-*   **Storefront Discovery (`/search`, `/recommend`):**
-    *   **Rate:** 300 requests per minute (Default).
-    *   **Enforcement:** Per **StoreID**.
-    *   **Goal:** Protects AI resources while allowing high-volume traffic from central backends.
-*   **Synchronization API (`/sync`):**
-    *   **Rate:** 20 requests per minute (Default).
-    *   **Enforcement:** Per **StoreID**.
-    *   **Goal:** Regulates merchant-level batch ingestion.
-
-When a limit is exceeded, the API returns a `429 Too Many Requests` status code.
+*   **Storefront Discovery (`/search`, `/recommend`):** 300 requests per minute.
+*   **Synchronization API (`/sync`):** 20 requests per minute.
