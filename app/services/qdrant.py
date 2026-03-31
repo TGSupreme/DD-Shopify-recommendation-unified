@@ -228,4 +228,94 @@ class QdrantService:
             logger.error(f"Failed to retrieve point for {product_id}: {str(e)}")
             raise
 
+    async def get_store_stats(self, store_id: str) -> Dict[str, Any]:
+        """
+        Retrieves store-specific statistics using indexed filters.
+        """
+        try:
+            # Calculate counts based on tenant partition key
+            count_result = await self.client.count(
+                collection_name=settings.COLLECTION_NAME,
+                count_filter=models.Filter(
+                    must=[
+                        models.FieldCondition(
+                            key="store_id",
+                            match=models.MatchValue(value=store_id)
+                        )
+                    ]
+                ),
+                exact=True
+            )
+            return {
+                "store_id": store_id,
+                "product_count": count_result.count,
+                "status": "active" if count_result.count > 0 else "empty"
+            }
+        except Exception as e:
+            logger.error(f"Failed to get stats for store {store_id}: {str(e)}")
+            raise
+
+    async def get_global_stats(self) -> Dict[str, Any]:
+        """
+        Gathers 'God View' metrics for the entire recommendation microservice.
+        """
+        try:
+            # 1. Get Collection & System Info
+            collection_info = await self.client.get_collection(settings.COLLECTION_NAME)
+            
+            # 2. Discover Tenants via Scroll (Fetch unique store_ids)
+            # We scroll through points to find unique store_ids in the payload
+            scroll_result = await self.client.scroll(
+                collection_name=settings.COLLECTION_NAME,
+                limit=1000, # Adjust based on expected number of stores
+                with_payload=["store_id"],
+                with_vectors=False
+            )
+            
+            points = scroll_result[0]
+            unique_stores = list(set(p.payload.get("store_id") for p in points if p.payload))
+            
+            # 3. Calculate Top Tenants (Manual count for the first few discovered stores)
+            top_5 = []
+            for store_id in unique_stores[:10]: # Check first 10 discovered stores
+                c = await self.client.count(
+                    collection_name=settings.COLLECTION_NAME,
+                    count_filter=models.Filter(
+                        must=[models.FieldCondition(key="store_id", match=models.MatchValue(value=store_id))]
+                    )
+                )
+                top_5.append({"store_id": store_id, "count": c.count})
+
+            # Sort to get the actual Top 5 from our sample
+            top_5 = sorted(top_5, key=lambda x: x["count"], reverse=True)[:5]
+
+            return {
+                "system": {
+                    "version": "1.0.0 (Unified Core)",
+                    "status": str(collection_info.status),
+                    "uptime_status": "healthy"
+                },
+                "collection_metrics": {
+                    "name": settings.COLLECTION_NAME,
+                    "total_points": collection_info.points_count,
+                    "indexed_vectors": collection_info.indexed_vectors_count,
+                    "segments_count": collection_info.segments_count,
+                    "optimizer_status": str(collection_info.optimizer_status),
+                    "vectors_config": {
+                        "size": settings.VECTOR_DIMENSION,
+                        "distance": "Cosine",
+                        "hnsw_config": {
+                            "m": collection_info.config.hnsw_config.m if hasattr(collection_info.config.hnsw_config, 'm') else 0
+                        }
+                    }
+                },
+                "tenant_insight": {
+                    "total_active_stores": len(unique_stores),
+                    "top_5_tenants": top_5
+                }
+            }
+        except Exception as e:
+            logger.error(f"Global stats fetch failed: {str(e)}")
+            raise
+
 qdrant_service = QdrantService()

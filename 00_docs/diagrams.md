@@ -8,41 +8,45 @@ This document contains the visual representations of the **Unified Shopify Recom
 Shows the high-level interaction between the core system components and external AI services.
 
 ```mermaid
-componentDiagram
-    [Shopify Store] as Store
-    
-    package "FastAPI Application" {
-        [Sync API] as Sync
-        [Search API] as Search
-        [Recommend API] as Recommend
-        [Qdrant Service] as QService
-        [Embedding Service] as EService
-    }
-    
-    database "Qdrant VDB" {
-        [Shared Collection] as Collection
-        [Nested Metadata Index] as MetaIndex
-        [Tenant Index (store_id)] as TenantIndex
-    }
-    
-    cloud "Jina AI" {
-        [Embedding API] as Jina
-    }
+graph TD
+    subgraph Shopify_Store [Shopify Storefront/Admin]
+        Store[Merchant/Shopper]
+    end
 
-    Store --> Sync
-    Store --> Search
-    Store --> Recommend
+    subgraph FastAPI_Application [FastAPI Application]
+        Sync[Sync API]
+        Search[Search API]
+        Recommend[Recommend API]
+        QService[Qdrant Service]
+        EService[Embedding Service]
+    end
+
+    subgraph Qdrant_VDB [Qdrant Vector Database]
+        Collection[(Shared Collection)]
+        MetaIndex[[Nested Metadata Index]]
+        TenantIndex[[Tenant Index: store_id]]
+    end
+
+    subgraph External_Services [AI Services]
+        Jina((Jina AI API))
+    end
+
+    Store -->|Ingest| Sync
+    Store -->|Query| Search
+    Store -->|History| Recommend
+
+    Sync -->|Vectorize| EService
+    Sync -->|Upsert| QService
     
-    Sync --> EService : Vectorize Search Core
-    Sync --> QService : Upsert Points
+    Search -->|Vectorize| EService
+    Search -->|Filter| QService
     
-    Search --> EService : Vectorize Query
-    Search --> QService : Query Points
+    Recommend -->|Weighted| QService
     
-    Recommend --> QService : Weighted Recommend
-    
-    EService --> Jina : HTTPS/REST
-    QService --> Collection : gRPC/REST
+    EService -->|REST| Jina
+    QService -->|gRPC/REST| Collection
+    Collection --- MetaIndex
+    Collection --- TenantIndex
 ```
 
 ---
@@ -155,7 +159,4 @@ graph LR
     
     B --> D[Qdrant Filter: 'metadata.price' < 100]
     B --> E[Qdrant Filter: 'brand' = 'Nike']
-    
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#ccf,stroke:#333,stroke-width:2px
 ```

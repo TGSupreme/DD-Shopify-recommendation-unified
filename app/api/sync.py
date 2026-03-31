@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 from typing import List
-from models.schemas import ProductUpsert, SyncResponse
+from models.schemas import ProductUpsert, SyncResponse, StoreStatsResponse
 from services.embedding import embedding_service
 from services.qdrant import qdrant_service
 from qdrant_client.http import models as q_models
@@ -125,3 +125,15 @@ async def get_raw_product(store_id: str, product_id: str):
     except Exception as e:
         logger.error(f"Debug fetch failed for {product_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Debug fetch failed.")
+
+@router.get("/{store_id}/stats", response_model=StoreStatsResponse)
+async def get_store_stats(store_id: str):
+    """
+    Returns high-level statistics for a specific store.
+    """
+    try:
+        stats = await qdrant_service.get_store_stats(store_id)
+        return StoreStatsResponse(**stats)
+    except Exception as e:
+        logger.error(f"Stats fetch failed for {store_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve store statistics.")

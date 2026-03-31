@@ -62,3 +62,30 @@ class ProductResponse(BaseModel):
 class SearchResponse(BaseModel):
     status: str
     results: List[ProductResponse]
+
+class StoreStatsResponse(BaseModel):
+    store_id: str
+    product_count: int
+    status: str = "active"
+
+class SystemInfo(BaseModel):
+    version: str
+    status: str
+    uptime_status: str
+
+class CollectionMetrics(BaseModel):
+    name: str
+    total_points: int
+    indexed_vectors: int
+    segments_count: int
+    optimizer_status: str
+    vectors_config: Dict[str, Any]
+
+class TenantInsight(BaseModel):
+    total_active_stores: int
+    top_5_tenants: List[Dict[str, Any]]
+
+class SystemStatsResponse(BaseModel):
+    system: SystemInfo
+    collection_metrics: CollectionMetrics
+    tenant_insight: TenantInsight
