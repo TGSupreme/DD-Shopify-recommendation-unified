@@ -27,10 +27,10 @@ async def sync_products(request: Request, store_id: str, products: List[ProductU
     logger.info(f"INGESTION START: Store={store_id}, ProductCount={len(products)}")
 
     try:
-        # 1. Prepare text for vectorization
+        # 1. Prepare text for vectorization (Using Search Core Fields)
         texts_to_embed = []
         for p in products:
-            tags_str = " ".join(p.tags) if p.tags else ""
+            tags_str = ", ".join(p.tags) if p.tags else ""
             combined_text = (
                 f"Title: {p.title}. "
                 f"Brand: {p.brand or ''}. "
@@ -47,27 +47,24 @@ async def sync_products(request: Request, store_id: str, products: List[ProductU
         points = []
         for i, p in enumerate(products):
             point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{p.product_id}"))
-            
-            # Map only non-None standardized fields to the root payload
+
+            # A. Search Core Payload (Root Level)
             payload = {
                 "store_id": store_id,
                 "product_id": p.product_id,
                 "title": p.title,
                 "description": p.description,
+                "brand": p.brand,
+                "category": p.category,
+                "tags": p.tags
             }
 
-            # Add categorical, numeric, and boolean fields if they exist
-            standard_keys = [
-                "brand", "category", "product_type", "collection", "tags",
-                "color", "size", "material", "gender", "age_group", "season",
-                "price", "discount", "rating", "weight", "is_available"
-            ]
-            
-            for key in standard_keys:
-                val = getattr(p, key)
-                if val is not None:
-                    payload[key] = val
-            
+            # B. Commerce Metadata (Nested Object)
+            # Only include non-None values to keep payload lean
+            metadata_dict = p.metadata.model_dump(exclude_none=True)
+            if metadata_dict:
+                payload["metadata"] = metadata_dict
+
             points.append(
                 q_models.PointStruct(
                     id=point_id,
@@ -75,7 +72,6 @@ async def sync_products(request: Request, store_id: str, products: List[ProductU
                     payload=payload
                 )
             )
-
         # 4. Upsert
         collection_name = settings.COLLECTION_NAME
         await qdrant_service.upsert_products(collection_name, points)
@@ -106,3 +102,26 @@ async def delete_product(request: Request, store_id: str, product_id: str):
     except Exception as e:
         logger.error(f"Deletion failed for product {product_id} in store {store_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Product deletion failed.")
+
+@router.get("/{store_id}/debug/{product_id}")
+async def get_raw_product(store_id: str, product_id: str):
+    """
+    DEVELOPMENT ONLY: Fetches the raw stored point via QdrantService.
+    """
+    try:
+        point = await qdrant_service.get_point_by_id(store_id, product_id)
+        
+        if not point:
+            raise HTTPException(status_code=404, detail="Product not found in Qdrant.")
+
+        return {
+            "point_id": point.id,
+            "payload": point.payload,
+            "vector_preview": point.vector[:10] if point.vector else None,
+            "vector_length": len(point.vector) if point.vector else 0
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Debug fetch failed for {product_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Debug fetch failed.")

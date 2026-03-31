@@ -1,33 +1,38 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 
-class ProductUpsert(BaseModel):
-    product_id: str
-    title: str
-    description: Optional[str] = ""
-    
-    # Categorical Attributes (Indexed as Keyword)
-    brand: Optional[str] = None
-    category: Optional[str] = None
-    product_type: Optional[str] = None
-    collection: Optional[str] = None
-    tags: Optional[List[str]] = Field(default_factory=list)
-    
-    color: Optional[str] = None
-    size: Optional[str] = None
-    material: Optional[str] = None
-    gender: Optional[str] = None
-    age_group: Optional[str] = None
-    season: Optional[str] = None
-    
+class ProductMetadata(BaseModel):
     # Numeric Attributes (Indexed as Range)
     price: Optional[float] = None
     discount: Optional[float] = None
     rating: Optional[float] = None
     weight: Optional[float] = None
     
+    # Variant / Physical Attributes (Indexed as Keyword)
+    color: Optional[str] = None
+    size: Optional[str] = None
+    material: Optional[str] = None
+    gender: Optional[str] = None
+    age_group: Optional[str] = None
+    season: Optional[str] = None
+    collection: Optional[str] = None
+    
     # State Attributes (Indexed as Boolean)
-    is_available: Optional[bool] = True
+    is_available: bool = True
+
+class ProductUpsert(BaseModel):
+    # 1. Core Identity
+    product_id: str
+    
+    # 2. Search Core (Top-level fields used for Vectorization)
+    title: str
+    description: Optional[str] = ""
+    brand: Optional[str] = None
+    category: Optional[str] = None
+    tags: List[str] = Field(default_factory=list)
+    
+    # 3. Commerce Metadata (Nested object for Filtering)
+    metadata: ProductMetadata
 
 class SyncResponse(BaseModel):
     status: str
@@ -40,6 +45,13 @@ class SearchRequest(BaseModel):
     limit: Optional[int] = 10
 
 class SimilarRequest(BaseModel):
+    filters: Optional[Dict[str, Any]] = {}
+    limit: Optional[int] = 10
+
+class RecommendRequest(BaseModel):
+    viewed_ids: Optional[List[str]] = Field(default_factory=list)
+    added_to_cart_ids: Optional[List[str]] = Field(default_factory=list)
+    purchased_ids: Optional[List[str]] = Field(default_factory=list)
     filters: Optional[Dict[str, Any]] = {}
     limit: Optional[int] = 10
 
