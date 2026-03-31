@@ -1,0 +1,1675 @@
+[
+  {
+    "product_id": "UT-001",
+    "title": "Vintage Maverick Denim Jacket",
+    "description": "Classic 90s inspired denim jacket with a relaxed fit and distressed detailing.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["denim", "vintage", "blue", "casual"],
+    "metadata": {
+      "price": 89.5,
+      "color": "Indigo",
+      "size": "L",
+      "material": "Organic Cotton",
+      "gender": "Unisex",
+      "season": "Spring",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-002",
+    "title": "Midnight Stealth Bomber Jacket",
+    "description": "Water-resistant bomber jacket featuring a matte finish and quilted lining.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["bomber", "black", "streetwear"],
+    "metadata": {
+      "price": 120.0,
+      "color": "Black",
+      "size": "M",
+      "material": "Nylon",
+      "gender": "Men",
+      "season": "Winter",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-003",
+    "title": "Cloud-Soft Cashmere Sweater",
+    "description": "Luxuriously soft crewneck sweater knitted from ethically sourced cashmere.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["cashmere", "sweater", "luxury", "grey"],
+    "metadata": {
+      "price": 195.0,
+      "rating": 4.9,
+      "color": "Heather Grey",
+      "size": "S",
+      "material": "Cashmere",
+      "gender": "Women",
+      "season": "Fall",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-004",
+    "title": "Everyday Essential Pima Tee",
+    "description": "Perfect white t-shirt features a tailored fit and tagless neck.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["t-shirt", "white", "basics"],
+    "metadata": {
+      "price": 28.0,
+      "color": "White",
+      "size": "XL",
+      "material": "Pima Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-005",
+    "title": "Urban Commuter Cargo Pants",
+    "description": "Water-repellent fabric and six reinforced pockets for all your gear.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["cargo", "olive", "utility"],
+    "metadata": {
+      "price": 75.0,
+      "color": "Olive Drab",
+      "size": "32",
+      "material": "Polyester Blend",
+      "gender": "Men",
+      "season": "Fall",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-006",
+    "title": "High-Rise Sculpting Leggings",
+    "description": "Ultra-stretch fabric with a wide waistband and side phone pocket.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["activewear", "leggings", "gym"],
+    "metadata": {
+      "price": 55.0,
+      "rating": 4.7,
+      "color": "Carbon Black",
+      "size": "M",
+      "material": "Spandex",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-007",
+    "title": "Artisan Leather Chelsea Boots",
+    "description": "Handcrafted from Italian full-grain leather with a Goodyear welt.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["leather", "boots", "chelsea", "brown"],
+    "metadata": {
+      "price": 210.0,
+      "color": "Cognac",
+      "size": "10",
+      "material": "Leather",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-008",
+    "title": "Eco-Friendly Canvas Tote",
+    "description": "Spacious tote bag made from recycled ocean plastic.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["tote", "eco", "recycled", "bag"],
+    "metadata": {
+      "price": 15.0,
+      "color": "Natural",
+      "material": "Recycled Plastic",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-009",
+    "title": "Brushed Flannel Work Shirt",
+    "description": "Heavyweight flannel shirt in a classic red plaid.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["flannel", "red", "plaid", "winter"],
+    "metadata": {
+      "price": 65.0,
+      "color": "Red/Black Plaid",
+      "size": "L",
+      "material": "Cotton Flannel",
+      "gender": "Men",
+      "season": "Winter",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-010",
+    "title": "Silk Slip Evening Dress",
+    "description": "Elegant midi-length slip dress with a cowl neck.",
+    "brand": "Urban Threadworks",
+    "category": "Dresses",
+    "tags": ["silk", "dress", "gold", "formal"],
+    "metadata": {
+      "price": 145.0,
+      "color": "Champagne Gold",
+      "size": "S",
+      "material": "100% Silk",
+      "gender": "Women",
+      "is_available": false
+    }
+  },
+  {
+    "product_id": "UT-011",
+    "title": "Retro Polarized Aviators",
+    "description": "Timeless aviator sunglasses with polarized lenses.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["sunglasses", "aviator", "gold"],
+    "metadata": {
+      "price": 45.0,
+      "color": "Gold",
+      "material": "Steel",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-012",
+    "title": "Performance Hybrid Shorts",
+    "description": "Quick-dry shorts with mesh lining for gym or pool.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["shorts", "swim", "gym"],
+    "metadata": {
+      "price": 35.0,
+      "color": "Royal Blue",
+      "size": "L",
+      "material": "Nylon",
+      "gender": "Men",
+      "season": "Summer",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-013",
+    "title": "Minimalist Leather Wallet",
+    "description": "Slim RFID-blocking wallet made from top-grain leather.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["wallet", "leather", "minimalist"],
+    "metadata": {
+      "price": 32.0,
+      "color": "Black",
+      "material": "Leather",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-014",
+    "title": "Sherpa-Lined Corduroy Jacket",
+    "description": "Vintage-style corduroy jacket with cozy faux-sherpa lining.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["corduroy", "sherpa", "brown"],
+    "metadata": {
+      "price": 95.0,
+      "color": "Tan",
+      "size": "M",
+      "material": "Corduroy",
+      "gender": "Men",
+      "season": "Winter",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-015",
+    "title": "Oversized Streetwear Hoodie",
+    "description": "Heavyweight cotton hoodie with a bold abstract print.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["hoodie", "streetwear", "oversized"],
+    "metadata": {
+      "price": 85.0,
+      "color": "Off-White",
+      "size": "L",
+      "material": "Cotton",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-016",
+    "title": "Linen Summer Trousers",
+    "description": "Breathable linen-cotton blend with a drawstring waist.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["linen", "summer", "trousers"],
+    "metadata": {
+      "price": 68.0,
+      "color": "Beige",
+      "size": "30",
+      "material": "Linen Blend",
+      "gender": "Men",
+      "season": "Summer",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-017",
+    "title": "Cable Knit Winter Beanie",
+    "description": "Warm beanie with a faux-fur pom and fleece lining.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["beanie", "knit", "winter"],
+    "metadata": {
+      "price": 22.0,
+      "color": "White",
+      "material": "Acrylic",
+      "gender": "Women",
+      "season": "Winter",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-018",
+    "title": "Tailored Wool Blazer",
+    "description": "Versatile navy blazer for professional or smart-casual wear.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["blazer", "wool", "navy"],
+    "metadata": {
+      "price": 175.0,
+      "color": "Navy",
+      "size": "40R",
+      "material": "Wool Blend",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-019",
+    "title": "Skinny Rocker Jeans",
+    "description": "High-stretch denim with hand-distressed knees.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["jeans", "skinny", "black"],
+    "metadata": {
+      "price": 79.0,
+      "color": "Washed Black",
+      "size": "28",
+      "material": "Stretch Denim",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-020",
+    "title": "Active-Dry Polo Shirt",
+    "description": "Moisture-wicking polo designed for the golf course.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["polo", "active", "golf"],
+    "metadata": {
+      "price": 48.0,
+      "color": "Sky Blue",
+      "size": "M",
+      "material": "Performance Mesh",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-021",
+    "title": "Floral Maxi Summer Dress",
+    "description": "Flowy dress with a vibrant floral pattern and ruffled sleeves.",
+    "brand": "Urban Threadworks",
+    "category": "Dresses",
+    "tags": ["floral", "maxi", "summer"],
+    "metadata": {
+      "price": 115.0,
+      "color": "Floral",
+      "size": "M",
+      "material": "Rayon",
+      "gender": "Women",
+      "season": "Summer",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-022",
+    "title": "Waterproof Mountain Parka",
+    "description": "Technical shell parka with fully taped seams.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["parka", "waterproof", "hiking"],
+    "metadata": {
+      "price": 185.0,
+      "color": "Forest Green",
+      "size": "L",
+      "material": "Gore-Tex",
+      "gender": "Men",
+      "season": "Winter",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-023",
+    "title": "Merino Wool Everyday Socks",
+    "description": "Anti-microbial and moisture-wicking merino blend.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["socks", "wool", "basics"],
+    "metadata": {
+      "price": 18.0,
+      "color": "Charcoal",
+      "material": "Merino Wool",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-024",
+    "title": "Oxford Button-Down Shirt",
+    "description": "Timeless oxford shirt in a crisp blue stripe.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["oxford", "shirt", "blue"],
+    "metadata": {
+      "price": 58.0,
+      "color": "Blue Stripe",
+      "size": "L",
+      "material": "Oxford Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-025",
+    "title": "Stretch Chino Shorts",
+    "description": "Classic chinos cut into a 9-inch summer short.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["shorts", "chino", "khaki"],
+    "metadata": {
+      "price": 42.0,
+      "color": "Khaki",
+      "size": "34",
+      "material": "Cotton Twill",
+      "gender": "Men",
+      "season": "Summer",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-026",
+    "title": "Luxe Velvet Cocktail Dress",
+    "description": "Stunning velvet dress with a sweetheart neckline and slit.",
+    "brand": "Urban Threadworks",
+    "category": "Dresses",
+    "tags": ["velvet", "cocktail", "burgundy", "formal"],
+    "metadata": {
+      "price": 165.0,
+      "color": "Burgundy",
+      "size": "S",
+      "material": "Velvet",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-027",
+    "title": "Titanium Sport Watch",
+    "description": "Lightweight titanium case with a breathable silicone strap.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["watch", "sport", "titanium"],
+    "metadata": {
+      "price": 250.0,
+      "color": "Silver/Grey",
+      "material": "Titanium",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-028",
+    "title": "Canvas High-Top Sneakers",
+    "description": "Classic high-top silhouette with a cushioned insole.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["sneakers", "canvas", "casual"],
+    "metadata": {
+      "price": 65.0,
+      "color": "White",
+      "size": "9",
+      "material": "Canvas",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-029",
+    "title": "Lightweight Puffer Vest",
+    "description": "Versatile layering piece with synthetic down insulation.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["puffer", "vest", "layering"],
+    "metadata": {
+      "price": 75.0,
+      "color": "Navy",
+      "size": "M",
+      "material": "Polyester",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-030",
+    "title": "Yoga Flow Cross-Back Tank",
+    "description": "Breathable tank top with built-in shelf bra for yoga.",
+    "brand": "Urban Threadworks",
+    "category": "Activewear",
+    "tags": ["yoga", "tank", "active"],
+    "metadata": {
+      "price": 45.0,
+      "color": "Lavender",
+      "size": "S",
+      "material": "Bamboo Fiber",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-031",
+    "title": "Slim Fit Stretch Suit Trousers",
+    "description": "Professional trousers with a hint of stretch for movement.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["trousers", "suit", "formal"],
+    "metadata": {
+      "price": 95.0,
+      "color": "Charcoal",
+      "size": "32",
+      "material": "Wool Blend",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-032",
+    "title": "Polarized Wayfarer Sunglasses",
+    "description": "Classic wayfarer style with high-definition polarized lenses.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["sunglasses", "wayfarer", "black"],
+    "metadata": {
+      "price": 40.0,
+      "color": "Matte Black",
+      "material": "Acetate",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-033",
+    "title": "Organic Cotton Sleep Set",
+    "description": "Ultra-soft pajama set including a tee and shorts.",
+    "brand": "Urban Threadworks",
+    "category": "Sleepwear",
+    "tags": ["pajamas", "soft", "sleepwear"],
+    "metadata": {
+      "price": 55.0,
+      "color": "Dusty Blue",
+      "size": "M",
+      "material": "Organic Cotton",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-034",
+    "title": "Water-Repellent Windbreaker",
+    "description": "Lightweight windbreaker that packs into its own pocket.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["windbreaker", "active", "outdoor"],
+    "metadata": {
+      "price": 60.0,
+      "color": "Teal",
+      "size": "L",
+      "material": "Ripstop Nylon",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-035",
+    "title": "Graphic Band Tee (Rock)",
+    "description": "Vintage-washed graphic tee featuring iconic rock motifs.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["graphic", "band", "vintage"],
+    "metadata": {
+      "price": 35.0,
+      "color": "Washed Black",
+      "size": "L",
+      "material": "Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-036",
+    "title": "Mid-Rise Denim Skirt",
+    "description": "Classic A-line denim skirt with a button-through front.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["skirt", "denim", "casual"],
+    "metadata": {
+      "price": 48.0,
+      "color": "Light Wash",
+      "size": "S",
+      "material": "Denim",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-037",
+    "title": "Compression Running Tights",
+    "description": "High-performance tights with reflective details for night runs.",
+    "brand": "Urban Threadworks",
+    "category": "Activewear",
+    "tags": ["running", "tights", "active"],
+    "metadata": {
+      "price": 65.0,
+      "color": "Black",
+      "size": "M",
+      "material": "Nylon/Lycra",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-038",
+    "title": "Braided Leather Belt",
+    "description": "Hand-braided leather belt with a solid brass buckle.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["belt", "leather", "accessory"],
+    "metadata": {
+      "price": 38.0,
+      "color": "Brown",
+      "material": "Leather",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-039",
+    "title": "Satin Pajama Robe",
+    "description": "Luxurious satin robe with a tie-waist and lace trim.",
+    "brand": "Urban Threadworks",
+    "category": "Sleepwear",
+    "tags": ["robe", "satin", "luxury"],
+    "metadata": {
+      "price": 75.0,
+      "color": "Emerald Green",
+      "size": "OS",
+      "material": "Satin",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-040",
+    "title": "Technical Down Parka",
+    "description": "Extreme weather parka with 800-fill power down.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["parka", "winter", "heavy"],
+    "metadata": {
+      "price": 350.0,
+      "color": "Graphite",
+      "size": "XL",
+      "material": "Down/Nylon",
+      "gender": "Men",
+      "season": "Winter",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-041",
+    "title": "V-Neck Viscose Blouse",
+    "description": "A light, flowy blouse with a deep V-neck and ruffled cuffs.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["blouse", "office", "elegant"],
+    "metadata": {
+      "price": 52.0,
+      "color": "Blush",
+      "size": "M",
+      "material": "Viscose",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-042",
+    "title": "Pleated Midi Skirt",
+    "description": "Elegant knife-pleated skirt with a shimmer finish.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["skirt", "midi", "formal"],
+    "metadata": {
+      "price": 62.0,
+      "color": "Silver",
+      "size": "M",
+      "material": "Polyester",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-043",
+    "title": "Rugged Workwear Overalls",
+    "description": "Heavy-duty duck canvas overalls for tough projects.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["overalls", "workwear", "canvas"],
+    "metadata": {
+      "price": 110.0,
+      "color": "Carhartt Brown",
+      "size": "L",
+      "material": "Duck Canvas",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-044",
+    "title": "Knitted Infinity Scarf",
+    "description": "Chunky knit scarf that provides warmth and style.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["scarf", "knit", "winter"],
+    "metadata": {
+      "price": 28.0,
+      "color": "Mustard Yellow",
+      "material": "Wool Blend",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-045",
+    "title": "Active Mesh Snapback",
+    "description": "Breathable mesh back cap with a custom embroidered patch.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["cap", "hat", "active"],
+    "metadata": {
+      "price": 25.0,
+      "color": "Grey/Black",
+      "material": "Cotton/Mesh",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-046",
+    "title": "Pointed Toe Stiletto Pumps",
+    "description": "Classic pumps with a 4-inch heel for formal occasions.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["pumps", "heels", "formal"],
+    "metadata": {
+      "price": 125.0,
+      "color": "Nude",
+      "size": "7",
+      "material": "Patent Leather",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-047",
+    "title": "Striped Boat Neck Top",
+    "description": "Classic nautical stripes in a soft jersey knit.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["stripes", "nautical", "casual"],
+    "metadata": {
+      "price": 38.0,
+      "color": "Navy/White",
+      "size": "S",
+      "material": "Jersey",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-048",
+    "title": "Slim Fit Polo (Basic)",
+    "description": "A well-fitting polo shirt for everyday casual wear.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["polo", "casual", "basics"],
+    "metadata": {
+      "price": 32.0,
+      "color": "Forest Green",
+      "size": "M",
+      "material": "Cotton Pique",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-049",
+    "title": "High-Waist Mom Jeans",
+    "description": "Relaxed fit jeans with a high waist and tapered leg.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["jeans", "denim", "vintage"],
+    "metadata": {
+      "price": 72.0,
+      "color": "Medium Blue",
+      "size": "27",
+      "material": "Rigid Denim",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-050",
+    "title": "Performance Anorak",
+    "description": "Windproof anorak with a large front pocket and side zips.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["anorak", "hiking", "active"],
+    "metadata": {
+      "price": 88.0,
+      "color": "Orange/Navy",
+      "size": "L",
+      "material": "Nylon",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-051",
+    "title": "Classic Trench Coat",
+    "description": "Double-breasted trench coat with a belted waist and storm flaps.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["trench", "classic", "formal"],
+    "metadata": {
+      "price": 195.0,
+      "color": "Honey",
+      "size": "M",
+      "material": "Cotton Gabardine",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-052",
+    "title": "Graphic Pocket Tee",
+    "description": "Soft cotton tee with a small artistic print on the chest pocket.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["t-shirt", "pocket", "art"],
+    "metadata": {
+      "price": 30.0,
+      "color": "Sage Green",
+      "size": "L",
+      "material": "Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-053",
+    "title": "Utility Jogger Pants",
+    "description": "Cuffed joggers with utility pockets and an elastic waist.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["joggers", "utility", "casual"],
+    "metadata": {
+      "price": 65.0,
+      "color": "Dark Grey",
+      "size": "M",
+      "material": "Cotton/Poly",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-054",
+    "title": "Silk Neck Scarf",
+    "description": "Small silk scarf with a retro geometric pattern.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["scarf", "silk", "retro"],
+    "metadata": {
+      "price": 24.0,
+      "color": "Yellow/Red",
+      "material": "Silk",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-055",
+    "title": "Suede Loafers",
+    "description": "Slip-on suede loafers with a flexible rubber sole.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["loafers", "suede", "casual"],
+    "metadata": {
+      "price": 95.0,
+      "color": "Navy",
+      "size": "11",
+      "material": "Suede",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-056",
+    "title": "Lace Trim Cami",
+    "description": "Delicate camisole with lace detailing at the neckline.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["cami", "lace", "layering"],
+    "metadata": {
+      "price": 28.0,
+      "color": "Black",
+      "size": "S",
+      "material": "Polyester",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-057",
+    "title": "Pleated Suit Shorts",
+    "description": "Smart shorts with a pleated front and tailored fit.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["shorts", "formal", "tailored"],
+    "metadata": {
+      "price": 55.0,
+      "color": "Grey",
+      "size": "32",
+      "material": "Wool Blend",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-058",
+    "title": "Knitted Cardigan",
+    "description": "Chunky open-front cardigan with large buttons and pockets.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["cardigan", "knit", "sweater"],
+    "metadata": {
+      "price": 78.0,
+      "color": "Oatmeal",
+      "size": "L",
+      "material": "Acrylic Blend",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-059",
+    "title": "Waterproof Rain Jacket",
+    "description": "Bright yellow rain jacket with a hood and reflective stripes.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["rain", "jacket", "waterproof"],
+    "metadata": {
+      "price": 65.0,
+      "color": "Yellow",
+      "size": "S",
+      "material": "PVC",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-060",
+    "title": "Floral Print Romper",
+    "description": "Cute and casual romper with a small floral print and tie waist.",
+    "brand": "Urban Threadworks",
+    "category": "Dresses",
+    "tags": ["romper", "floral", "summer"],
+    "metadata": {
+      "price": 45.0,
+      "color": "Pink Floral",
+      "size": "M",
+      "material": "Rayon",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-061",
+    "title": "Technical Running Shorts",
+    "description": "Ultra-light shorts with a split hem and built-in liner.",
+    "brand": "Urban Threadworks",
+    "category": "Activewear",
+    "tags": ["running", "shorts", "active"],
+    "metadata": {
+      "price": 42.0,
+      "color": "Black",
+      "size": "M",
+      "material": "Nylon",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-062",
+    "title": "Leather Crossbody Bag",
+    "description": "Small leather bag with an adjustable strap and gold hardware.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["bag", "leather", "crossbody"],
+    "metadata": {
+      "price": 110.0,
+      "color": "Burgundy",
+      "material": "Leather",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-063",
+    "title": "Striped Linen Shirt",
+    "description": "Breathable linen shirt in a vertical blue and white stripe.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["linen", "shirt", "stripes"],
+    "metadata": {
+      "price": 55.0,
+      "color": "Blue/White",
+      "size": "L",
+      "material": "Linen",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-064",
+    "title": "Wide Leg Trousers",
+    "description": "Flowy wide-leg trousers with a high waist and front pleats.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["trousers", "wide-leg", "formal"],
+    "metadata": {
+      "price": 85.0,
+      "color": "Black",
+      "size": "L",
+      "material": "Polyester",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-065",
+    "title": "Cozy Knit Slippers",
+    "description": "Warm slippers with a soft fleece lining and rubber sole.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["slippers", "soft", "home"],
+    "metadata": {
+      "price": 25.0,
+      "color": "Grey",
+      "size": "M",
+      "material": "Wool/Fleece",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-066",
+    "title": "Henley Tee",
+    "description": "Classic henley shirt with a three-button placket and long sleeves.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["henley", "casual", "long-sleeve"],
+    "metadata": {
+      "price": 38.0,
+      "color": "Navy",
+      "size": "M",
+      "material": "Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-067",
+    "title": "Chiffon Maxi Skirt",
+    "description": "Lightweight chiffon skirt with a flowy silhouette and lining.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["skirt", "maxi", "chiffon"],
+    "metadata": {
+      "price": 58.0,
+      "color": "Lavender",
+      "size": "S",
+      "material": "Chiffon",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-068",
+    "title": "Canvas Utility Jacket",
+    "description": "Durable jacket with multiple pockets and a corduroy collar.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["jacket", "utility", "canvas"],
+    "metadata": {
+      "price": 95.0,
+      "color": "Olive",
+      "size": "L",
+      "material": "Canvas",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-069",
+    "title": "Silk Slip Skirt",
+    "description": "Midi-length silk skirt with a bias cut for a flattering fit.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["skirt", "silk", "midi"],
+    "metadata": {
+      "price": 89.0,
+      "color": "Champagne",
+      "size": "M",
+      "material": "Silk",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-070",
+    "title": "Plaid Flannel Scarf",
+    "description": "Soft and warm flannel scarf in a red and black plaid.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["scarf", "plaid", "flannel"],
+    "metadata": {
+      "price": 22.0,
+      "color": "Red/Black",
+      "material": "Cotton",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-071",
+    "title": "Sporty Windbreaker",
+    "description": "Lightweight windbreaker with reflective details for visibility.",
+    "brand": "Urban Threadworks",
+    "category": "Activewear",
+    "tags": ["windbreaker", "active", "sport"],
+    "metadata": {
+      "price": 55.0,
+      "color": "Black/Silver",
+      "size": "M",
+      "material": "Nylon",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-072",
+    "title": "Embroidered Denim Shorts",
+    "description": "Denim shorts with small floral embroidery on the pockets.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["shorts", "denim", "embroidered"],
+    "metadata": {
+      "price": 42.0,
+      "color": "Light Blue",
+      "size": "28",
+      "material": "Denim",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-073",
+    "title": "Casual Knit Polo",
+    "description": "Soft knit polo shirt with a flat collar and short sleeves.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["polo", "knit", "casual"],
+    "metadata": {
+      "price": 45.0,
+      "color": "Beige",
+      "size": "L",
+      "material": "Cotton Blend",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-074",
+    "title": "High-Rise Flare Jeans",
+    "description": "Retro-style flare jeans with a high waist and dark wash.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["jeans", "retro", "flare"],
+    "metadata": {
+      "price": 78.0,
+      "color": "Dark Blue",
+      "size": "27",
+      "material": "Denim",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-075",
+    "title": "Wool Fedora Hat",
+    "description": "Classic fedora hat made from 100% wool with a leather band.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["hat", "fedora", "wool"],
+    "metadata": {
+      "price": 48.0,
+      "color": "Dark Brown",
+      "material": "Wool",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-076",
+    "title": "Basic Tank Top",
+    "description": "Essential ribbed tank top with a scoop neck and slim fit.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["tank", "basics", "ribbed"],
+    "metadata": {
+      "price": 18.0,
+      "color": "White",
+      "size": "S",
+      "material": "Cotton",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-077",
+    "title": "Lightweight Chino Trousers",
+    "description": "Breathable chino trousers with a slim fit and tapered leg.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["trousers", "chino", "casual"],
+    "metadata": {
+      "price": 62.0,
+      "color": "Olive",
+      "size": "32",
+      "material": "Cotton Twill",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-078",
+    "title": "Knit Midi Dress",
+    "description": "Comfortable midi dress in a soft knit fabric with a side slit.",
+    "brand": "Urban Threadworks",
+    "category": "Dresses",
+    "tags": ["dress", "knit", "midi"],
+    "metadata": {
+      "price": 68.0,
+      "color": "Charcoal",
+      "size": "M",
+      "material": "Acrylic Blend",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-079",
+    "title": "Leather Biker Jacket",
+    "description": "Classic leather biker jacket with asymmetrical zip and studs.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["jacket", "leather", "biker"],
+    "metadata": {
+      "price": 250.0,
+      "color": "Black",
+      "size": "L",
+      "material": "Leather",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-080",
+    "title": "Patterned Silk Tie",
+    "description": "Formal silk tie with a small paisley pattern in navy and red.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["tie", "silk", "formal"],
+    "metadata": {
+      "price": 35.0,
+      "color": "Navy/Red",
+      "material": "Silk",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-081",
+    "title": "Espadrille Sandals",
+    "description": "Summer sandals with a woven jute sole and canvas straps.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["sandals", "espadrilles", "summer"],
+    "metadata": {
+      "price": 48.0,
+      "color": "Sand",
+      "size": "8",
+      "material": "Canvas/Jute",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-082",
+    "title": "Denim Button-Down Shirt",
+    "description": "Classic denim shirt with two chest pockets and a regular fit.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["shirt", "denim", "casual"],
+    "metadata": {
+      "price": 58.0,
+      "color": "Medium Wash",
+      "size": "L",
+      "material": "Denim",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-083",
+    "title": "Pleated Mini Skirt",
+    "description": "A-line mini skirt with a pleated front and side zip.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["skirt", "mini", "pleated"],
+    "metadata": {
+      "price": 45.0,
+      "color": "Black",
+      "size": "S",
+      "material": "Polyester",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-084",
+    "title": "Performance Hoodie",
+    "description": "Lightweight hoodie with moisture-wicking fabric for workouts.",
+    "brand": "Urban Threadworks",
+    "category": "Activewear",
+    "tags": ["hoodie", "active", "sport"],
+    "metadata": {
+      "price": 52.0,
+      "color": "Dark Grey",
+      "size": "M",
+      "material": "Polyester",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-085",
+    "title": "Canvas Backpack",
+    "description": "Durable backpack with a laptop sleeve and padded straps.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["backpack", "canvas", "utility"],
+    "metadata": {
+      "price": 65.0,
+      "color": "Navy",
+      "material": "Canvas",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-086",
+    "title": "Pointed Toe Flats",
+    "description": "Elegant flat shoes with a pointed toe and low heel.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["flats", "shoes", "formal"],
+    "metadata": {
+      "price": 58.0,
+      "color": "Tan",
+      "size": "8",
+      "material": "Suede",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-087",
+    "title": "Basic V-Neck Tee",
+    "description": "Essential cotton tee with a clean V-neckline.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["t-shirt", "v-neck", "basics"],
+    "metadata": {
+      "price": 22.0,
+      "color": "Grey",
+      "size": "L",
+      "material": "Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-088",
+    "title": "Cuffed Chino Shorts",
+    "description": "Smart shorts with a cuffed hem and regular fit.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["shorts", "chino", "casual"],
+    "metadata": {
+      "price": 38.0,
+      "color": "Navy",
+      "size": "34",
+      "material": "Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-089",
+    "title": "Satin Slip Top",
+    "description": "Simple satin top with thin straps and a draped neckline.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["top", "satin", "elegant"],
+    "metadata": {
+      "price": 35.0,
+      "color": "Champagne",
+      "size": "S",
+      "material": "Satin",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-090",
+    "title": "Quilted Bomber Jacket",
+    "description": "Lightweight bomber jacket with a subtle quilted pattern.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["jacket", "bomber", "quilted"],
+    "metadata": {
+      "price": 85.0,
+      "color": "Army Green",
+      "size": "M",
+      "material": "Polyester",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-091",
+    "title": "Embroidered Mesh Dress",
+    "description": "Delicate dress with embroidered flowers on a mesh overlay.",
+    "brand": "Urban Threadworks",
+    "category": "Dresses",
+    "tags": ["dress", "mesh", "embroidered"],
+    "metadata": {
+      "price": 135.0,
+      "color": "Black/Multicolor",
+      "size": "M",
+      "material": "Polyester",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-092",
+    "title": "Sporty Waist Bag",
+    "description": "Small bag with an adjustable waist strap and multiple zips.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["bag", "sport", "waist-bag"],
+    "metadata": {
+      "price": 28.0,
+      "color": "Neon Orange",
+      "material": "Nylon",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-093",
+    "title": "Leather Oxford Shoes",
+    "description": "Formal leather shoes with a clean silhouette and laces.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["shoes", "leather", "formal"],
+    "metadata": {
+      "price": 145.0,
+      "color": "Black",
+      "size": "10",
+      "material": "Leather",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-094",
+    "title": "Striped Knit Sweater",
+    "description": "Soft sweater with horizontal stripes in white and navy.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["sweater", "knit", "stripes"],
+    "metadata": {
+      "price": 65.0,
+      "color": "White/Navy",
+      "size": "L",
+      "material": "Cotton Blend",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-095",
+    "title": "Pleated Midi Skirt (Velvet)",
+    "description": "Elegant velvet skirt with deep pleats and a shimmer.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["skirt", "velvet", "formal"],
+    "metadata": {
+      "price": 75.0,
+      "color": "Emerald Green",
+      "size": "M",
+      "material": "Velvet",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-096",
+    "title": "Performance Leggings (Short)",
+    "description": "High-rise performance leggings with a 7/8 length.",
+    "brand": "Urban Threadworks",
+    "category": "Activewear",
+    "tags": ["leggings", "active", "yoga"],
+    "metadata": {
+      "price": 48.0,
+      "color": "Dark Blue",
+      "size": "S",
+      "material": "Nylon",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-097",
+    "title": "Woven Straw Hat",
+    "description": "Summer straw hat with a wide brim and ribbon detail.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["hat", "straw", "summer"],
+    "metadata": {
+      "price": 32.0,
+      "color": "Natural",
+      "material": "Straw",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-098",
+    "title": "Suede Ankle Boots",
+    "description": "Simple ankle boots with a low heel and side zip.",
+    "brand": "Urban Threadworks",
+    "category": "Footwear",
+    "tags": ["boots", "suede", "casual"],
+    "metadata": {
+      "price": 110.0,
+      "color": "Tan",
+      "size": "8",
+      "material": "Suede",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-099",
+    "title": "Graphic Pocket Tee (Forest)",
+    "description": "Cotton tee with a small forest print on the chest pocket.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["t-shirt", "pocket", "nature"],
+    "metadata": {
+      "price": 30.0,
+      "color": "Olive",
+      "size": "L",
+      "material": "Cotton",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-100",
+    "title": "Slim Fit Suit Jacket",
+    "description": "Professional suit jacket with a slim lapel and dual vents.",
+    "brand": "Urban Threadworks",
+    "category": "Outerwear",
+    "tags": ["jacket", "suit", "formal"],
+    "metadata": {
+      "price": 185.0,
+      "color": "Navy Blue",
+      "size": "40R",
+      "material": "Wool Blend",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-101",
+    "title": "High-Rise Paperbag Trousers",
+    "description": "Elegant trousers with a paperbag waist and belted tie.",
+    "brand": "Urban Threadworks",
+    "category": "Bottoms",
+    "tags": ["trousers", "elegant", "belted"],
+    "metadata": {
+      "price": 65.0,
+      "color": "Beige",
+      "size": "M",
+      "material": "Polyester",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-102",
+    "title": "Technical Fleece Pullover",
+    "description": "Warm fleece pullover with a zip neck and chest pocket.",
+    "brand": "Urban Threadworks",
+    "category": "Tops",
+    "tags": ["fleece", "pullover", "active"],
+    "metadata": {
+      "price": 55.0,
+      "color": "Grey/Orange",
+      "size": "L",
+      "material": "Polyester Fleece",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-103",
+    "title": "Silk Headband",
+    "description": "Soft silk headband with an elastic back and floral print.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["headband", "silk", "floral"],
+    "metadata": {
+      "price": 18.0,
+      "color": "Pink Floral",
+      "material": "Silk",
+      "gender": "Women",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-104",
+    "title": "Leather Belt (Basic)",
+    "description": "Classic leather belt with a solid steel buckle.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["belt", "leather", "basics"],
+    "metadata": {
+      "price": 32.0,
+      "color": "Black",
+      "material": "Leather",
+      "gender": "Men",
+      "is_available": true
+    }
+  },
+  {
+    "product_id": "UT-105",
+    "title": "Cotton Blend Ankle Socks",
+    "description": "Simple ankle socks in a soft cotton blend for every day.",
+    "brand": "Urban Threadworks",
+    "category": "Accessories",
+    "tags": ["socks", "basics", "casual"],
+    "metadata": {
+      "price": 12.0,
+      "color": "White",
+      "material": "Cotton Blend",
+      "gender": "Unisex",
+      "is_available": true
+    }
+  }
+]

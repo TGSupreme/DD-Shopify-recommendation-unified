@@ -1,0 +1,13 @@
+{
+  "query_text": "comfortable blue jacket for winter",
+  "filters": {
+    "category": "Outerwear",
+    "price": {
+      "min": 50,
+      "max": 150
+    },
+    "color": ["Navy", "Royal Blue", "Indigo"],
+    "is_available": true
+  },
+  "limit": 5
+}
