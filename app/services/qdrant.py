@@ -116,7 +116,9 @@ class QdrantService:
         try:
             results = await self.client.query_points(
                 collection_name=collection_name,
-                query=query_vector,
+                query=models.NearestQuery(
+                    nearest=query_vector
+                ),
                 query_filter=query_filter,
                 limit=limit,
                 score_threshold=0.1
@@ -135,15 +137,19 @@ class QdrantService:
         limit: int = 10
     ) -> List[models.ScoredPoint]:
         try:
-            results = await self.client.recommend(
+            results = await self.client.query_points(
                 collection_name=collection_name,
-                positive=positive_ids,
+                query=models.RecommendQuery(
+                    recommend=models.RecommendInput(
+                        positive=positive_ids,
+                        strategy=models.RecommendStrategy.AVERAGE_VECTOR
+                    )
+                ),
                 query_filter=query_filter,
-                limit=limit,
-                strategy=models.RecommendStrategy.AVERAGE_VECTOR
+                limit=limit
             )
-            logger.info(f"Qdrant Recommend SUCCESS: Found {len(results)} matches")
-            return results
+            logger.info(f"Qdrant Recommend SUCCESS: Found {len(results.points)} matches")
+            return results.points
         except Exception as e:
             logger.error(f"Qdrant Recommend FAILURE: {str(e)}")
             raise

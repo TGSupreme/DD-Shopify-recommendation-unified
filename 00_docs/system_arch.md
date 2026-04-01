@@ -10,7 +10,7 @@ The system is built as a high-performance microservice designed for real-time e-
 ### Core Components
 1.  **FastAPI Application:** Entry point for storefront and administrative requests. Handles request validation, orchestration, and business logic.
 2.  **Embedding Service:** Transforms Search Core fields (`title`, `description`, `brand`, `category`, `tags`) into 768-dim vectors using Jina AI.
-3.  **Qdrant Vector Database:** Manages high-dimensional vectors and associated standardized metadata, providing similarity searches via the `recommend` and `query_points` APIs.
+3.  **Qdrant Vector Database:** Manages high-dimensional vectors and associated standardized metadata, providing similarity searches via the unified **`query_points`** API.
 
 ---
 
@@ -31,7 +31,7 @@ The system represents a customer's current preference in the product vector spac
     *   **Purchased (High):** Weight 5.0
     *   **Cart (Medium):** Weight 3.0
     *   **Viewed (Low):** Weight 1.0
-*   **Vector Search:** The system uses the Qdrant `recommend` API with the `AVERAGE_VECTOR` strategy to find the closest products in the merchant's partition.
+*   **Vector Search:** The system uses the Qdrant **`query_points`** API with a **`RecommendQuery`** and the `AVERAGE_VECTOR` strategy to find the closest products in the merchant's partition.
 *   **Resiliency:** The engine pre-validates all interaction IDs against the index before generating recommendations.
 
 ---
