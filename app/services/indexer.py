@@ -144,4 +144,24 @@ class IndexerService(QdrantBaseService):
             points_selector=q_models.PointIdsList(points=[point_id])
         )
 
+    async def delete_store(self, store_id: str):
+        """
+        Securely removes all product data associated with a specific store.
+        Uses a filter selector to ensure only the target store's data is removed.
+        """
+        logger.info(f"DELETION PIPELINE: Wiping entire store data for '{store_id}'")
+        await self.client.delete(
+            collection_name=self.collection_name,
+            points_selector=q_models.FilterSelector(
+                filter=q_models.Filter(
+                    must=[
+                        q_models.FieldCondition(
+                            key="store_id",
+                            match=q_models.MatchValue(value=store_id)
+                        )
+                    ]
+                )
+            )
+        )
+
 product_indexer = IndexerService()

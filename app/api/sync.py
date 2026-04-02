@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Query
+from fastapi import APIRouter, HTTPException, Request, Query, Header
 from typing import List
 from models.schemas import ProductUpsert, SyncResponse, StoreStatsResponse, DebugRequest
 from services.indexer import product_indexer
@@ -9,6 +9,10 @@ import logging
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
+
+async def verify_admin(x_admin_token: str):
+    if not x_admin_token or x_admin_token != settings.ADMIN_API_KEY:
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid Admin Token")
 
 @router.post("/{store_id}/products", response_model=SyncResponse)
 @limiter.limit(settings.RATE_LIMIT_SYNC, key_func=get_store_only_key)
@@ -72,3 +76,22 @@ async def get_store_stats(store_id: str):
     except Exception as e:
         logger.error(f"Stats API failed for {store_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve store statistics.")
+
+@router.delete("/{store_id}/delete-store", response_model=SyncResponse)
+@limiter.limit(settings.RATE_LIMIT_SYNC, key_func=get_store_only_key)
+async def delete_store(request: Request, store_id: str, x_admin_token: str = Header(None)):
+    """
+    Securely removes all data for a specific store.
+    Requires X-Admin-Token for security.
+    """
+    await verify_admin(x_admin_token)
+    
+    try:
+        await product_indexer.delete_store(store_id)
+        return SyncResponse(
+            status="success", 
+            message=f"Store '{store_id}' data has been completely removed."
+        )
+    except Exception as e:
+        logger.error(f"Store deletion failed for {store_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete store data.")
