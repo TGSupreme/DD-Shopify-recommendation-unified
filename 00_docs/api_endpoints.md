@@ -3,7 +3,7 @@
 This document outlines the available endpoints for the **Unified Shopify Recommendation Engine**.
 
 ## 1. Data Synchronization (`/sync`)
-Keep the product catalog up-to-date using the standardized Tri-tier schema.
+Endpoints for managing the product catalog and store lifecycle.
 
 ### Upsert Products
 `POST /sync/{store_id}/products`
@@ -28,8 +28,54 @@ Keep the product catalog up-to-date using the standardized Tri-tier schema.
 ]
 ```
 
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Successfully synced 1 products",
+  "count": 1
+}
+```
+
 ### Delete Product
 `DELETE /sync/{store_id}/products/{product_id}`
+
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Product UT-001 deleted",
+  "count": 0
+}
+```
+
+### Delete Store Data
+`DELETE /sync/{store_id}/delete-store`
+
+**Security:**
+* Requires `X-Admin-Token` header for authentication.
+* Rate limited to 20 requests per minute.
+
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Store 'store_name' data has been completely removed.",
+  "count": 0
+}
+```
+
+### Get Store Stats
+`GET /sync/{store_id}/stats`
+
+**Response:**
+```json
+{
+  "store_id": "store_test_A",
+  "product_count": 150,
+  "status": "active"
+}
+```
 
 ### Debug Products (Development)
 `POST /sync/{store_id}/debug`
@@ -40,7 +86,9 @@ Keep the product catalog up-to-date using the standardized Tri-tier schema.
   "product_ids": ["UT-001", "UT-002"]
 }
 ```
-Returns the full raw Qdrant points (payload + vector preview) for validation.
+
+**Response:**
+Returns raw Qdrant points containing payload and internal metadata for the requested IDs.
 
 ---
 
@@ -51,17 +99,25 @@ High-performance endpoints for storefront integration.
 `POST /search/{store_id}`
 
 **Input:**
-* `query_text`: (String) The user's search query.
-* `filters`: (Object, Optional) Standardized filters. Keys not in Search Core are automatically mapped to `metadata`.
-* `limit`: (Integer, Optional) Default 10.
-* `diversity_penalty`: (Float, Optional) Default 0.0. Range [0.0, 1.0]. Higher values increase result diversity using MMR re-ranking.
+```json
+{
+  "query_text": "Vintage blue denim jackets",
+  "filters": {
+    "price": {"min": 50, "max": 150},
+    "is_available": true
+  },
+  "limit": 10,
+  "diversity_penalty": 0.3
+}
+```
 
 **Response:**
 ```json
 {
   "status": "success",
   "results": [
-    { "product_id": "id1", "score": 0.89 }
+    { "product_id": "UT-001", "score": 0.892 },
+    { "product_id": "UT-045", "score": 0.845 }
   ]
 }
 ```
@@ -70,9 +126,24 @@ High-performance endpoints for storefront integration.
 `POST /search/{store_id}/similar/{product_id}`
 
 **Input:**
-* `filters`: (Object, Optional) Standardized filters.
-* `limit`: (Integer, Optional) Default 10.
-* `diversity_penalty`: (Float, Optional) Default 0.0. Range [0.0, 1.0].
+```json
+{
+  "filters": { "is_available": true },
+  "limit": 5,
+  "diversity_penalty": 0.0
+}
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "results": [
+    { "product_id": "UT-002", "score": 0.954 },
+    { "product_id": "UT-009", "score": 0.912 }
+  ]
+}
+```
 
 ---
 
@@ -84,22 +155,54 @@ High-performance endpoints for storefront integration.
 **Input:**
 ```json
 {
-  "viewed_ids": ["id1", "id2"],
-  "added_to_cart_ids": ["id3"],
-  "purchased_ids": ["id4"],
+  "viewed_ids": ["UT-001", "UT-002"],
+  "added_to_cart_ids": ["UT-003"],
+  "purchased_ids": ["UT-004"],
   "filters": {
-    "price": {"min": 10, "max": 500},
     "is_available": true
   },
-  "limit": 12,
+  "limit": 10,
   "diversity_penalty": 0.5
+}
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "results": [
+    { "product_id": "UT-010", "score": 0.887 },
+    { "product_id": "UT-015", "score": 0.864 }
+  ]
+}
+```
+
+### Complementary Products ("Complete the Look")
+`POST /recommend/{store_id}/complementary/{product_id}`
+
+**Input:**
+```json
+{
+  "filters": {},
+  "limit": 3,
+  "diversity_penalty": 0.1
+}
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "results": [
+    { "product_id": "UT-ACC-01", "score": 0.782 },
+    { "product_id": "UT-SHO-05", "score": 0.741 }
+  ]
 }
 ```
 
 ---
 
 ## 4. Health & Monitoring (`/health`)
-Monitor system operational status and dependency health.
 
 ### System Health
 `GET /health/`

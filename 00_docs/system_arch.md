@@ -40,6 +40,7 @@ The system represents a customer's current preference in the product vector spac
 Security and speed are achieved through native Qdrant multi-tenancy and automatic indexing:
 
 *   **Tenant Isolation:** `store_id` is used as a mandatory partition key.
+*   **Secure Data Deletion:** Entire store data can be wiped via the `delete-store` API, using the `FilterSelector` in Qdrant to ensure only records matching the target `store_id` are removed.
 *   **Automatic Startup Indexing:** On server startup, the system ensures all standardized commerce fields have corresponding payload indexes:
     *   **Root Keyword Indexes:** `brand`, `category`, `tags`, `product_id`.
     *   **Nested Keyword Indexes:** `metadata.color`, `metadata.size`, `metadata.material`, `metadata.gender`, `metadata.season`, `metadata.collection`.
