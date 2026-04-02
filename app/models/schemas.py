@@ -53,6 +53,11 @@ class SimilarRequest(BaseModel):
     limit: Optional[int] = 10
     diversity_penalty: float = Field(default=0.0, ge=0.0, le=1.0)
 
+class ComplementaryRequest(BaseModel):
+    filters: Optional[Dict[str, Any]] = {}
+    limit: Optional[int] = 10
+    diversity_penalty: float = Field(default=0.0, ge=0.0, le=1.0)
+
 class RecommendRequest(BaseModel):
     viewed_ids: Optional[List[str]] = Field(default_factory=list)
     added_to_cart_ids: Optional[List[str]] = Field(default_factory=list)

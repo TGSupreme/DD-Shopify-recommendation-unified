@@ -112,21 +112,47 @@ class QdrantService:
         query_vector: List[float], 
         query_filter: models.Filter,
         limit: int = 10,
-        include_vectors: bool = False
+        include_vectors: bool = False,
+        group_by: Optional[str] = None,
+        group_size: int = 1
     ) -> List[models.ScoredPoint]:
         try:
-            results = await self.client.query_points(
-                collection_name=collection_name,
-                query=models.NearestQuery(
-                    nearest=query_vector
-                ),
-                query_filter=query_filter,
-                limit=limit,
-                score_threshold=0.1,
-                with_vectors=include_vectors
-            )
-            logger.info(f"Qdrant Query SUCCESS: Found {len(results.points)} matches")
-            return results.points
+            if group_by:
+                # Use query_points_groups for grouping
+                results = await self.client.query_points_groups(
+                    collection_name=collection_name,
+                    query=models.NearestQuery(
+                        nearest=query_vector
+                    ),
+                    query_filter=query_filter,
+                    limit=limit,
+                    group_by=group_by,
+                    group_size=group_size,
+                    score_threshold=0.1,
+                    with_vectors=include_vectors
+                )
+                
+                # Extract the top hit from each group
+                scored_points = []
+                for group in results.groups:
+                    if group.hits:
+                        scored_points.append(group.hits[0])
+                logger.info(f"Qdrant Grouped Query SUCCESS: Found {len(scored_points)} groups")
+                return scored_points
+            else:
+                # Use standard query_points
+                results = await self.client.query_points(
+                    collection_name=collection_name,
+                    query=models.NearestQuery(
+                        nearest=query_vector
+                    ),
+                    query_filter=query_filter,
+                    limit=limit,
+                    score_threshold=0.1,
+                    with_vectors=include_vectors
+                )
+                logger.info(f"Qdrant Query SUCCESS: Found {len(results.points)} matches")
+                return results.points
         except Exception as e:
             logger.error(f"Qdrant Query FAILURE: {str(e)}")
             raise
