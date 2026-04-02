@@ -67,6 +67,24 @@ class JinaEmbeddings:
             logger.error(f"Unexpected error during Jina vectorization: {str(e)}")
             raise
 
+    async def check_health(self) -> dict:
+        """
+        Checks Jina AI API health by measuring latency for a minimal request.
+        """
+        if not self.api_key:
+            return {"status": "unhealthy", "latency_ms": 0.0, "error": "API Key missing"}
+        
+        start_time = time.time()
+        try:
+            data = {"model": self.model, "input": ["health_check"]}
+            response = await self.client.post("/embeddings", json=data)
+            response.raise_for_status()
+            latency = (time.time() - start_time) * 1000
+            return {"status": "healthy", "latency_ms": round(latency, 2)}
+        except Exception as e:
+            logger.error(f"Jina AI health check failed: {str(e)}")
+            return {"status": "unhealthy", "latency_ms": 0.0, "error": str(e)}
+
     async def close(self):
         await self.client.aclose()
 

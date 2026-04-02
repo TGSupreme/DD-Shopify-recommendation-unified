@@ -58,7 +58,25 @@ The engine strictly enforces a standardized schema to guarantee performance:
 
 ---
 
-## 6. System Lifecycle Management
+## 6. Diversity Re-ranking (MMR)
+To prevent "result clustering" (e.g., showing only identical white t-shirts), the system implements a post-search re-ranking phase.
+
+### Maximal Marginal Relevance (MMR)
+*   **Algorithm:** When `diversity_penalty > 0` is requested, the engine fetches a larger candidate pool (Top 50) including their vectors.
+*   **Objective:** Iteratively select items that balance high relevance (semantic score) with low redundancy (cosine similarity to already selected items).
+*   **Equation:** `Score = (1 - λ) * Relevance - λ * MaxSimilarity(already_selected)`.
+
+---
+
+## 7. Health & Monitoring
+The system provides a detailed `/health` endpoint for proactive monitoring of critical dependencies:
+
+*   **Jina AI Latency:** Measures real-time round-trip latency for embedding generation.
+*   **Qdrant Segment Health:** Monitors collection status (`green`/`yellow`/`red`), optimizer status, and segment fragmentation.
+
+---
+
+## 8. System Lifecycle Management
 The application utilizes FastAPI's **lifespan** context to manage resources:
 *   **Startup:** Pre-initializes the collection and all nested payload indexes. Validates Qdrant connectivity.
 *   **Shutdown:** Gracefully closes the Qdrant client and other persistent connections.

@@ -39,14 +39,19 @@ class SyncResponse(BaseModel):
     message: str
     count: Optional[int] = 0
 
+class DebugRequest(BaseModel):
+    product_ids: List[str]
+
 class SearchRequest(BaseModel):
     query_text: str # Query text is required for semantic search
     filters: Optional[Dict[str, Any]] = {}
     limit: Optional[int] = 10
+    diversity_penalty: float = Field(default=0.0, ge=0.0, le=1.0)
 
 class SimilarRequest(BaseModel):
     filters: Optional[Dict[str, Any]] = {}
     limit: Optional[int] = 10
+    diversity_penalty: float = Field(default=0.0, ge=0.0, le=1.0)
 
 class RecommendRequest(BaseModel):
     viewed_ids: Optional[List[str]] = Field(default_factory=list)
@@ -54,6 +59,7 @@ class RecommendRequest(BaseModel):
     purchased_ids: Optional[List[str]] = Field(default_factory=list)
     filters: Optional[Dict[str, Any]] = {}
     limit: Optional[int] = 10
+    diversity_penalty: float = Field(default=0.0, ge=0.0, le=1.0)
 
 class ProductResponse(BaseModel):
     product_id: str
@@ -89,3 +95,20 @@ class SystemStatsResponse(BaseModel):
     system: SystemInfo
     collection_metrics: CollectionMetrics
     tenant_insight: TenantInsight
+
+class JinaHealth(BaseModel):
+    status: str
+    latency_ms: float
+
+class QdrantHealth(BaseModel):
+    status: str
+    optimizer_status: str
+    segments_count: int
+
+class DependenciesHealth(BaseModel):
+    jina_ai: JinaHealth
+    qdrant: QdrantHealth
+
+class HealthResponse(BaseModel):
+    system: str
+    dependencies: DependenciesHealth

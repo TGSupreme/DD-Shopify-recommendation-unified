@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Request
 from models.schemas import RecommendRequest, SearchResponse, ProductResponse
 from services.qdrant import qdrant_service
 from utils.filters import translate_filters
+from utils.mmr import calculate_mmr
 from core.config import settings
 from utils.limiter import limiter, get_store_only_key
 import logging
@@ -21,6 +22,10 @@ async def get_recommendations(request: Request, store_id: str, recommend_request
         # 1. Translate filters
         q_filter = translate_filters(store_id, recommend_request.filters)
         
+        apply_diversity = recommend_request.diversity_penalty > 0.0
+        fetch_limit = recommend_request.limit or settings.TOP_K
+        query_limit = fetch_limit * 5 if apply_diversity else fetch_limit
+        
         # 2. Call specialized recommendation service
         hits = await qdrant_service.get_personalized_recommendations(
             store_id=store_id,
@@ -28,17 +33,34 @@ async def get_recommendations(request: Request, store_id: str, recommend_request
             cart_ids=recommend_request.added_to_cart_ids,
             purchase_ids=recommend_request.purchased_ids,
             query_filter=q_filter,
-            limit=recommend_request.limit or settings.TOP_K
+            limit=query_limit,
+            include_vectors=apply_diversity
         )
 
-        # 3. Format results
-        results = [
-            ProductResponse(
-                product_id=hit.payload.get("product_id"),
-                score=hit.score
+        # 3. Apply MMR Diversity if requested
+        if apply_diversity and hits:
+            candidate_ids = [hit.payload.get("product_id") for hit in hits]
+            candidate_vectors = [hit.vector for hit in hits]
+            candidate_scores = [hit.score for hit in hits]
+            
+            diverse_results = calculate_mmr(
+                candidate_ids=candidate_ids,
+                candidate_vectors=candidate_vectors,
+                candidate_scores=candidate_scores,
+                limit=fetch_limit,
+                diversity_penalty=recommend_request.diversity_penalty
             )
-            for hit in hits
-        ]
+            
+            results = [ProductResponse(product_id=pid, score=score) for pid, score in diverse_results]
+        else:
+            # 3. Format standard results
+            results = [
+                ProductResponse(
+                    product_id=hit.payload.get("product_id"),
+                    score=hit.score
+                )
+                for hit in hits
+            ][:fetch_limit]
 
         return SearchResponse(status="success", results=results)
 

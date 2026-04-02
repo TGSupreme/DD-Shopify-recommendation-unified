@@ -111,7 +111,8 @@ class QdrantService:
         collection_name: str, 
         query_vector: List[float], 
         query_filter: models.Filter,
-        limit: int = 10
+        limit: int = 10,
+        include_vectors: bool = False
     ) -> List[models.ScoredPoint]:
         try:
             results = await self.client.query_points(
@@ -121,7 +122,8 @@ class QdrantService:
                 ),
                 query_filter=query_filter,
                 limit=limit,
-                score_threshold=0.1
+                score_threshold=0.1,
+                with_vectors=include_vectors
             )
             logger.info(f"Qdrant Query SUCCESS: Found {len(results.points)} matches")
             return results.points
@@ -134,7 +136,8 @@ class QdrantService:
         collection_name: str, 
         positive_ids: List[str], 
         query_filter: models.Filter,
-        limit: int = 10
+        limit: int = 10,
+        include_vectors: bool = False
     ) -> List[models.ScoredPoint]:
         try:
             results = await self.client.query_points(
@@ -146,7 +149,8 @@ class QdrantService:
                     )
                 ),
                 query_filter=query_filter,
-                limit=limit
+                limit=limit,
+                with_vectors=include_vectors
             )
             logger.info(f"Qdrant Recommend SUCCESS: Found {len(results.points)} matches")
             return results.points
@@ -161,7 +165,8 @@ class QdrantService:
         cart_ids: List[str],
         purchase_ids: List[str],
         query_filter: models.Filter,
-        limit: int = 10
+        limit: int = 10,
+        include_vectors: bool = False
     ) -> List[models.ScoredPoint]:
         """
         Business Logic:
@@ -211,27 +216,31 @@ class QdrantService:
             collection_name=settings.COLLECTION_NAME,
             positive_ids=positive_ids,
             query_filter=query_filter,
-            limit=limit
+            limit=limit,
+            include_vectors=include_vectors
         )
 
-    async def get_point_by_id(self, store_id: str, product_id: str) -> Optional[models.Record]:
+    async def get_points_by_ids(self, store_id: str, product_ids: List[str]) -> List[models.Record]:
         """
-        Retrieves a single point from Qdrant by calculating the internal UUID.
+        Retrieves multiple points from Qdrant by calculating their internal UUIDs.
         Includes vectors for debugging purposes.
         """
         try:
-            point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{product_id}"))
+            internal_ids = [
+                str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{pid}")) 
+                for pid in product_ids
+            ]
             
             points = await self.client.retrieve(
                 collection_name=settings.COLLECTION_NAME,
-                ids=[point_id],
+                ids=internal_ids,
                 with_payload=True,
                 with_vectors=True
             )
             
-            return points[0] if points else None
+            return points
         except Exception as e:
-            logger.error(f"Failed to retrieve point for {product_id}: {str(e)}")
+            logger.error(f"Failed to retrieve points for {product_ids}: {str(e)}")
             raise
 
     async def get_store_stats(self, store_id: str) -> Dict[str, Any]:
@@ -323,5 +332,24 @@ class QdrantService:
         except Exception as e:
             logger.error(f"Global stats fetch failed: {str(e)}")
             raise
+
+    async def check_health(self) -> dict:
+        """
+        Checks Qdrant segment health and collection status.
+        """
+        try:
+            collection_info = await self.client.get_collection(settings.COLLECTION_NAME)
+            return {
+                "status": str(collection_info.status),
+                "optimizer_status": str(collection_info.optimizer_status),
+                "segments_count": collection_info.segments_count
+            }
+        except Exception as e:
+            logger.error(f"Qdrant health check failed: {str(e)}")
+            return {
+                "status": "unhealthy",
+                "optimizer_status": "unknown",
+                "segments_count": 0
+            }
 
 qdrant_service = QdrantService()

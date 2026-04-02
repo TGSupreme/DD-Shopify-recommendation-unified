@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Query
 from typing import List
-from models.schemas import ProductUpsert, SyncResponse, StoreStatsResponse
+from models.schemas import ProductUpsert, SyncResponse, StoreStatsResponse, DebugRequest
 from services.embedding import embedding_service
 from services.qdrant import qdrant_service
 from qdrant_client.http import models as q_models
@@ -103,27 +103,36 @@ async def delete_product(request: Request, store_id: str, product_id: str):
         logger.error(f"Deletion failed for product {product_id} in store {store_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Product deletion failed.")
 
-@router.get("/{store_id}/debug/{product_id}")
-async def get_raw_product(store_id: str, product_id: str):
+@router.post("/{store_id}/debug")
+async def get_raw_products(store_id: str, debug_request: DebugRequest):
     """
-    DEVELOPMENT ONLY: Fetches the raw stored point via QdrantService.
+    DEVELOPMENT ONLY: Fetches the raw stored points via QdrantService.
+    Supports multiple IDs passed in the request body.
     """
     try:
-        point = await qdrant_service.get_point_by_id(store_id, product_id)
-        
-        if not point:
-            raise HTTPException(status_code=404, detail="Product not found in Qdrant.")
+        if not debug_request.product_ids:
+            raise HTTPException(status_code=400, detail="At least one product_id is required.")
 
-        return {
-            "point_id": point.id,
-            "payload": point.payload,
-            "vector_preview": point.vector[:10] if point.vector else None,
-            "vector_length": len(point.vector) if point.vector else 0
-        }
+        points = await qdrant_service.get_points_by_ids(store_id, debug_request.product_ids)
+        
+        if not points:
+            raise HTTPException(status_code=404, detail="No products found in Qdrant.")
+
+        results = []
+        for point in points:
+            results.append({
+                "product_id": point.payload.get("product_id") if point.payload else None,
+                "point_id": point.id,
+                "payload": point.payload,
+                "vector_preview": point.vector[:10] if point.vector else None,
+                "vector_length": len(point.vector) if point.vector else 0
+            })
+            
+        return results
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Debug fetch failed for {product_id}: {str(e)}")
+        logger.error(f"Debug fetch failed for {debug_request.product_ids}: {str(e)}")
         raise HTTPException(status_code=500, detail="Debug fetch failed.")
 
 @router.get("/{store_id}/stats", response_model=StoreStatsResponse)
