@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Header
 from models.schemas import SystemStatsResponse
-from services.qdrant import qdrant_service
+from services.admin import admin_service
 from core.config import settings
 import logging
 
@@ -20,8 +20,8 @@ async def get_system_stats(x_admin_token: str = Header(None)):
     await verify_admin(x_admin_token)
     
     try:
-        stats = await qdrant_service.get_global_stats()
-        return stats
+        stats = await admin_service.get_global_system_stats()
+        return SystemStatsResponse(**stats)
     except Exception as e:
         logger.error(f"Failed to fetch global system stats: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve system statistics.")

@@ -90,7 +90,7 @@ class CollectionMetrics(BaseModel):
     indexed_vectors: int
     segments_count: int
     optimizer_status: str
-    vectors_config: Dict[str, Any]
+    vectors_config: Any
 
 class TenantInsight(BaseModel):
     total_active_stores: int

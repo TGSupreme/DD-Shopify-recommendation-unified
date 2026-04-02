@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from models.schemas import HealthResponse, JinaHealth, QdrantHealth, DependenciesHealth
 from services.embedding import embedding_service
-from services.qdrant import qdrant_service
+from services.admin import admin_service
 import asyncio
 
 router = APIRouter()
@@ -13,11 +13,12 @@ async def get_health():
     """
     jina_result, qdrant_result = await asyncio.gather(
         embedding_service.check_health(),
-        qdrant_service.check_health()
+        admin_service.get_health_status()
     )
 
     system_status = "healthy"
-    if jina_result.get("status") != "healthy" or qdrant_result.get("status") not in ("green", "ok"):
+    # Qdrant status can be 'ok', 'green', 'yellow', etc.
+    if jina_result.get("status") != "healthy" or qdrant_result.get("status") == "unhealthy":
         system_status = "degraded"
 
     return HealthResponse(

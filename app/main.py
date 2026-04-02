@@ -6,7 +6,7 @@ from api.search import router as search_router
 from api.recommend import router as recommend_router
 from api.admin import router as admin_router
 from api.health import router as health_router
-from services.qdrant import qdrant_service
+from services.indexer import product_indexer
 from core.config import settings
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
     # STARTUP: Pre-initialize Qdrant Collection and Indexes
     logger.info("SYSTEM STARTUP: Validating Qdrant Connection...")
     try:
-        await qdrant_service.ensure_collection(settings.COLLECTION_NAME)
+        await product_indexer.ensure_collection()
         logger.info(f"SYSTEM READY: Shared collection '{settings.COLLECTION_NAME}' is active and optimized.")
     except Exception as e:
         logger.error(f"SYSTEM CRITICAL: Failed to initialize Qdrant at startup: {str(e)}")
@@ -38,7 +38,7 @@ async def lifespan(app: FastAPI):
     
     # SHUTDOWN: Clean up resources if needed
     logger.info("SYSTEM SHUTDOWN: Closing connections...")
-    await qdrant_service.client.close()
+    await product_indexer.close()
 
 app = FastAPI(
     title="Unified Shopify Recommendation Engine",
