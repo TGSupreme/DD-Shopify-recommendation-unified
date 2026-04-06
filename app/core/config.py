@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     JINA_API_KEY: Optional[str] = None
     JINA_EMBEDDING_URL: str = "https://api.jina.ai/v1/embeddings"
     JINA_EMBEDDING_MODEL: str = "jina-embeddings-v2-base-en"
+    JINA_RERANKER_MODEL: str = "jina-reranker-v2-base-multilingual"
     
     # Admin Configuration
     ADMIN_API_KEY: str  # Change in production

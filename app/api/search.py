@@ -22,7 +22,8 @@ async def semantic_search(request: Request, store_id: str, search_request: Searc
             query_text=search_request.query_text,
             filters=search_request.filters,
             limit=search_request.limit,
-            diversity_penalty=search_request.diversity_penalty
+            diversity_penalty=search_request.diversity_penalty,
+            rerank=search_request.rerank
         )
         return SearchResponse(status="success", results=results)
     except Exception as e:

@@ -47,6 +47,7 @@ class SearchRequest(BaseModel):
     filters: Optional[Dict[str, Any]] = {}
     limit: Optional[int] = 10
     diversity_penalty: float = Field(default=0.0, ge=0.0, le=1.0)
+    rerank: bool = True
 
 class SimilarRequest(BaseModel):
     filters: Optional[Dict[str, Any]] = {}
