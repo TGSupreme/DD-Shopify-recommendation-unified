@@ -45,7 +45,20 @@ Metadata doesn’t define *what* a product is—it controls *when* and *how* it 
 
 ---
 
-## 3. User Interactions: The Engine of Personalization
+## 3. Advanced Search: Two-Stage Retrieval
+The system uses a high-precision **Two-Stage Funnel** for search queries to ensure your customers find exactly what they are looking for.
+
+* **Stage 1: Fast Recall:** The AI quickly scans your entire catalog to find the top 50 matches.
+* **Stage 2: Neural Reranking:** A secondary, more powerful AI (Cross-Encoder) re-evaluates those 50 items to solve "linguistic traps" like:
+    * **Negations:** "Cotton but NOT blue" will correctly hide blue cotton items.
+    * **Fine Details:** Distinguishing between "Waterproof" and "Water-resistant."
+    * **Complex Queries:** Handling long, natural language sentences from customers.
+
+*Merchant Tip:* To get the most out of the Reranker, ensure your **Descriptions** are detailed, as the Reranker looks at the full text to make its final decision.
+
+---
+
+## 4. User Interactions: The Engine of Personalization
 
 The system learns customer preferences by analyzing behavior using a weighted model:
 

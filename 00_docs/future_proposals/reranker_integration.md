@@ -1,5 +1,8 @@
 # Future Proposal: Two-Stage Retrieval with Jina Reranker v2
 
+> **STATUS: IMPLEMENTED** (As of April 2026)
+> This architecture is now live and serves all semantic search requests.
+
 ## 1. Executive Summary
 While the current vector-based search is excellent for broad retrieval, it occasionally misses fine-grained linguistic nuances (like negations or specific technical constraints). This proposal outlines a **Two-Stage Retrieval Architecture** that introduces a Cross-Encoder (Reranker) to surgically refine the top results before they reach the user.
 

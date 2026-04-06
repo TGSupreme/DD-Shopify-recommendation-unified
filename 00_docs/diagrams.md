@@ -19,6 +19,7 @@ graph TD
         Recommend[Recommend API]
         QService[Qdrant Service]
         EService[Embedding Service]
+        Reranker[Reranking Service]
     end
 
     subgraph Qdrant_VDB [Qdrant Vector Database]
@@ -28,7 +29,8 @@ graph TD
     end
 
     subgraph External_Services [AI Services]
-        Jina((Jina AI API))
+        Jina_Embed((Jina AI Embed))
+        Jina_Rerank((Jina AI Rerank))
     end
 
     Store -->|Ingest| Sync
@@ -39,11 +41,13 @@ graph TD
     Sync -->|Upsert| QService
     
     Search -->|Vectorize| EService
+    Search -->|Rerank| Reranker
     Search -->|Filter| QService
     
     Recommend -->|Weighted| QService
     
-    EService -->|REST| Jina
+    EService -->|REST| Jina_Embed
+    Reranker -->|REST| Jina_Rerank
     QService -->|gRPC/REST| Collection
     Collection --- MetaIndex
     Collection --- TenantIndex
@@ -51,7 +55,41 @@ graph TD
 
 ---
 
-### 2. Data Model (Class Diagram)
+### 2. Semantic Search Flow: Two-Stage Funnel
+Illustrates the high-precision retrieval funnel.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Shopper
+    participant API as FastAPI (Search)
+    participant Jina as Jina AI (Embed)
+    participant Qdrant as Qdrant VDB
+    participant Reranker as Jina AI (Rerank)
+
+    Shopper->>API: POST /search (Query Text)
+    API->>Jina: Request Query Vector
+    Jina-->>API: Returning Embedding
+    
+    rect rgb(240, 240, 240)
+        Note over API, Qdrant: Stage 1: Fast Retrieval (Recall)
+        API->>Qdrant: Retrieve Top 50 candidates
+        Qdrant-->>API: Top 50 Matches + Vectors
+    end
+
+    rect rgb(240, 240, 240)
+        Note over API, Reranker: Stage 2: Neural Reranking (Precision)
+        API->>Reranker: Query + Top 50 Docs
+        Reranker-->>API: Re-sorted Indices (Top 20)
+    end
+    
+    Note over API: (Optional) Apply MMR Diversity
+    API-->>Shopper: Scored Results
+```
+
+---
+
+### 3. Data Model (Class Diagram)
 Represents the **Tri-tier Structured Design** and the relationships between identity, search core, and metadata.
 
 ```mermaid

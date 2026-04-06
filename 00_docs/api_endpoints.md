@@ -107,7 +107,8 @@ High-performance endpoints for storefront integration.
     "is_available": true
   },
   "limit": 10,
-  "diversity_penalty": 0.3
+  "diversity_penalty": 0.3,
+  "rerank": true
 }
 ```
 

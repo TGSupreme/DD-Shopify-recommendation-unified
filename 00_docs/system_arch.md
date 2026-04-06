@@ -10,7 +10,8 @@ The system is built as a high-performance microservice designed for real-time e-
 ### Core Components
 1.  **FastAPI Application:** Entry point for storefront and administrative requests. Handles request validation, orchestration, and business logic.
 2.  **Embedding Service:** Transforms Search Core fields (`title`, `description`, `brand`, `category`, `tags`) into 768-dim vectors using Jina AI.
-3.  **Qdrant Vector Database:** Manages high-dimensional vectors and associated standardized metadata, providing similarity searches via the unified **`query_points`** API.
+3.  **Reranking Service (Search Only):** A high-precision Cross-Encoder (Jina Reranker v2) that re-evaluates the top candidates from a vector search for maximum linguistic relevance during semantic searches.
+4.  **Qdrant Vector Database:** Manages high-dimensional vectors and associated standardized metadata, providing similarity searches via the unified **`query_points`** API.
 
 ---
 
@@ -23,7 +24,20 @@ To maintain a high-quality "Digital Fingerprint" for every product, the ingestio
 
 ---
 
-## 3. Personalization Logic (Weighted Intent)
+## 3. Two-Stage Retrieval for Search (Neural Reranking)
+To ensure the #1 search result is the most accurate, the system implements a two-stage neural funnel for semantic search queries.
+
+### Stage 1: Fast Retrieval (The Net)
+*   **Action:** Qdrant retrieves the **Top 50** candidates from the store partition based on the query vector.
+*   **Target:** High recall; find all likely matches quickly.
+
+### Stage 2: Neural Reranking (The Judge)
+*   **Action:** Jina Reranker v2 performs a deep linguistic comparison (Cross-Encoding) between the user's **Query Text** and the **Top 50 Candidates**.
+*   **Outcome:** Accurate re-sorting based on fine-grained linguistics (negations, context, precise attributes) that vector search alone might miss.
+
+---
+
+## 4. Personalization Logic (Weighted Intent)
 The system represents a customer's current preference in the product vector space using a "User Interest Vector".
 
 ### Implementation: Weighted Recommendation
