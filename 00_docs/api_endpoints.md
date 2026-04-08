@@ -226,9 +226,53 @@ High-performance endpoints for storefront integration.
 }
 ```
 
+### Get Global System Stats ("God View")
+`GET /admin/stats`
+
+**Security:**
+* Requires `X-Admin-Token` header for authentication.
+
+**Response:**
+```json
+{
+  "system": {
+    "version": "1.1.0 (Refactored Core)",
+    "status": "green",
+    "uptime_status": "healthy"
+  },
+  "collection_metrics": {
+    "name": "shopify_recommendations",
+    "total_points": 1500,
+    "indexed_vectors": 1500,
+    "segments_count": 4,
+    "optimizer_status": "ok",
+    "vectors_config": { ... }
+  },
+  "tenant_insight": {
+    "total_active_stores": 12,
+    "top_5_tenants": [
+      { "store_id": "store_a", "count": 450 },
+      { "store_id": "store_b", "count": 320 }
+    ]
+  }
+}
+```
+
 ---
 
-## 5. Tenant-Based Rate Limiting
+## 5. System Utilities
+
+### Root
+`GET /`
+Returns a simple JSON message confirming the service is active.
+
+### Ping
+`GET /ping`
+Returns a plain text "Server is alive." string.
+
+---
+
+## 6. Tenant-Based Rate Limiting
 Enforced per **StoreID** to protect AI resources:
 
 *   **Storefront Discovery (`/search`, `/recommend`):** 300 requests per minute.
