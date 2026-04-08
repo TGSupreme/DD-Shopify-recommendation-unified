@@ -26,6 +26,7 @@ class RecommenderService(QdrantBaseService):
         """
         Calculates a 'User Interest Vector' by weighting interactions.
         """
+        start_total = time.time()
         # 1. Deduplicate & Validate IDs (internal lookup)
         all_pids = list(set((viewed_ids or []) + (cart_ids or []) + (purchase_ids or [])))
         if not all_pids:
@@ -70,6 +71,7 @@ class RecommenderService(QdrantBaseService):
         query_limit = fetch_limit * 5 if apply_diversity else fetch_limit
 
         # 5. Execute Recommendation via Qdrant
+        start_qdrant = time.time()
         results = await self.client.query_points(
             collection_name=self.collection_name,
             query=q_models.RecommendQuery(
@@ -82,11 +84,14 @@ class RecommenderService(QdrantBaseService):
             limit=query_limit,
             with_vectors=apply_diversity
         )
+        qdrant_ms = (time.time() - start_qdrant) * 1000
         
         hits = results.points
 
         # 6. Apply MMR Diversity if requested
+        mmr_ms = 0.0
         if apply_diversity and hits:
+            start_mmr = time.time()
             from utils.mmr import calculate_mmr
             diverse_results = calculate_mmr(
                 candidate_ids=[h.payload.get("product_id") for h in hits],
@@ -95,8 +100,26 @@ class RecommenderService(QdrantBaseService):
                 limit=fetch_limit,
                 diversity_penalty=diversity_penalty
             )
+            mmr_ms = (time.time() - start_mmr) * 1000
+            
+            total_ms = (time.time() - start_total) * 1000
+            logger.info(
+                f"PERSONALIZED RECOMMENDATION: "
+                f"Store={store_id}, "
+                f"Qdrant={qdrant_ms:.2f}ms, "
+                f"MMR={mmr_ms:.2f}ms, "
+                f"Total={total_ms:.2f}ms"
+            )
             return [{"product_id": pid, "score": score} for pid, score in diverse_results]
 
+        total_ms = (time.time() - start_total) * 1000
+        logger.info(
+            f"PERSONALIZED RECOMMENDATION: "
+            f"Store={store_id}, "
+            f"Qdrant={qdrant_ms:.2f}ms, "
+            f"MMR=0.00ms, "
+            f"Total={total_ms:.2f}ms"
+        )
         return [{"product_id": h.payload.get("product_id"), "score": h.score} for h in hits][:fetch_limit]
 
 product_recommender = RecommenderService()

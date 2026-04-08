@@ -89,6 +89,7 @@ class IndexerService(QdrantBaseService):
         if not products:
             return 0
 
+        start_total = time.time()
         logger.info(f"INGESTION PIPELINE: Store={store_id}, Count={len(products)}")
 
         # 1. Extract Core Text for Vectorization
@@ -101,7 +102,7 @@ class IndexerService(QdrantBaseService):
                 f"Tags: {tags_str}"
             )
 
-        # 2. Generate Embeddings
+        # 2. Generate Embeddings (Embedding latency is already logged in service)
         embeddings = await embedding_service.get_embeddings(texts)
 
         # 3. Build Point Structs
@@ -130,25 +131,40 @@ class IndexerService(QdrantBaseService):
             )
 
         # 4. Upsert to Qdrant
+        start_upsert = time.time()
         await self.client.upsert(
             collection_name=self.collection_name,
             points=points
+        )
+        upsert_ms = (time.time() - start_upsert) * 1000
+        total_ms = (time.time() - start_total) * 1000
+        
+        logger.info(
+            f"INGESTION COMPLETED: "
+            f"Store={store_id}, "
+            f"Count={len(products)}, "
+            f"UpsertLatency={upsert_ms:.2f}ms, "
+            f"TotalLatency={total_ms:.2f}ms"
         )
         return len(products)
 
     async def delete_product(self, store_id: str, product_id: str):
         """Removes a single product from the index."""
+        start_time = time.time()
         point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{store_id}_{product_id}"))
         await self.client.delete(
             collection_name=self.collection_name,
             points_selector=q_models.PointIdsList(points=[point_id])
         )
+        latency_ms = (time.time() - start_time) * 1000
+        logger.info(f"DELETE PRODUCT: Store={store_id}, Product={product_id}, Latency={latency_ms:.2f}ms")
 
     async def delete_store(self, store_id: str):
         """
         Securely removes all product data associated with a specific store.
         Uses a filter selector to ensure only the target store's data is removed.
         """
+        start_time = time.time()
         logger.info(f"DELETION PIPELINE: Wiping entire store data for '{store_id}'")
         await self.client.delete(
             collection_name=self.collection_name,
@@ -163,5 +179,7 @@ class IndexerService(QdrantBaseService):
                 )
             )
         )
+        latency_ms = (time.time() - start_time) * 1000
+        logger.info(f"DELETE STORE: Store={store_id}, Latency={latency_ms:.2f}ms")
 
 product_indexer = IndexerService()

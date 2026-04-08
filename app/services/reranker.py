@@ -58,7 +58,7 @@ class JinaReranker:
             response = await self.client.post(self.url, json=data)
             response.raise_for_status()
             
-            latency = time.time() - start_time
+            latency_ms = (time.time() - start_time) * 1000
             result = response.json()
             
             # The API returns an array of results with 'index' and 'relevance_score'
@@ -67,7 +67,8 @@ class JinaReranker:
             
             usage = result.get("usage", {})
             logger.info(
-                f"Jina AI Reranker: Latency={latency:.4f}s, "
+                f"JINA RERANKER: "
+                f"Latency={latency_ms:.2f}ms, "
                 f"Tokens={usage.get('total_tokens', 'N/A')}, "
                 f"Documents={len(documents)}"
             )

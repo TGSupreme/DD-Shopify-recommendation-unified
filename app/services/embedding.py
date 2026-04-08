@@ -46,14 +46,15 @@ class JinaEmbeddings:
             response = await self.client.post("/embeddings", json=data)
             response.raise_for_status()
             
-            latency = time.time() - start_time
+            latency_ms = (time.time() - start_time) * 1000
             result = response.json()
             
             embeddings = [item["embedding"] for item in result["data"]]
             usage = result.get("usage", {})
             
             logger.info(
-                f"Jina AI Vectorization: Latency={latency:.4f}s, "
+                f"JINA VECTORIZATION: "
+                f"Latency={latency_ms:.2f}ms, "
                 f"Tokens={usage.get('total_tokens', 'N/A')}, "
                 f"Count={len(texts)}"
             )

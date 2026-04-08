@@ -56,6 +56,7 @@ class DiscoveryService(QdrantBaseService):
         diversity_penalty: float = 0.0
     ) -> List[Dict[str, Any]]:
         """Finds items similar to a specific product_id."""
+        start_total = time.time()
         # 1. Retrieve Target Vector
         target_points = await self.get_points_by_ids(store_id, [product_id])
         if not target_points:
@@ -68,12 +69,16 @@ class DiscoveryService(QdrantBaseService):
         if not q_filter.must_not: q_filter.must_not = []
         q_filter.must_not.append(q_models.FieldCondition(key="product_id", match=q_models.MatchValue(value=product_id)))
 
-        return await self._execute_search_pipeline(
+        results = await self._execute_search_pipeline(
             query_vector=target_vector,
             q_filter=q_filter,
             limit=limit,
             diversity_penalty=diversity_penalty
         )
+        
+        total_ms = (time.time() - start_total) * 1000
+        logger.info(f"SIMILARITY SEARCH: Store={store_id}, Product={product_id}, Latency={total_ms:.2f}ms")
+        return results
 
     async def get_complementary_products(
         self,
@@ -84,6 +89,7 @@ class DiscoveryService(QdrantBaseService):
         diversity_penalty: float = 0.0
     ) -> List[Dict[str, Any]]:
         """'Complete the Look' - returns one item per complementary category."""
+        start_total = time.time()
         target_points = await self.get_points_by_ids(store_id, [product_id])
         if not target_points: return []
         
@@ -99,13 +105,17 @@ class DiscoveryService(QdrantBaseService):
         if target_category:
             q_filter.must_not.append(q_models.FieldCondition(key="category", match=q_models.MatchValue(value=target_category)))
 
-        return await self._execute_search_pipeline(
+        results = await self._execute_search_pipeline(
             query_vector=target_vector,
             q_filter=q_filter,
             limit=limit,
             diversity_penalty=diversity_penalty,
             group_by="category" # Ensure variety
         )
+
+        total_ms = (time.time() - start_total) * 1000
+        logger.info(f"COMPLEMENTARY RECOMMENDATION: Store={store_id}, Product={product_id}, Latency={total_ms:.2f}ms")
+        return results
 
     async def _execute_search_pipeline(
         self, 
@@ -192,25 +202,23 @@ class DiscoveryService(QdrantBaseService):
             )
             mmr_ms = (time.time() - start_mmr) * 1000
             
-            if apply_reranker:
-                logger.info(
-                    f"SEARCH FLOW LATENCY: "
-                    f"Embedding={embed_ms:.2f}ms, "
-                    f"VectorFetch={qdrant_ms:.2f}ms, "
-                    f"Reranker={rerank_ms:.2f}ms, "
-                    f"MMR={mmr_ms:.2f}ms"
-                )
-            
-            return [{"product_id": pid, "score": score} for pid, score in diverse_results]
-        
-        if apply_reranker:
             logger.info(
                 f"SEARCH FLOW LATENCY: "
                 f"Embedding={embed_ms:.2f}ms, "
                 f"VectorFetch={qdrant_ms:.2f}ms, "
                 f"Reranker={rerank_ms:.2f}ms, "
-                f"MMR=0.00ms"
+                f"MMR={mmr_ms:.2f}ms"
             )
+            
+            return [{"product_id": pid, "score": score} for pid, score in diverse_results]
+        
+        logger.info(
+            f"SEARCH FLOW LATENCY: "
+            f"Embedding={embed_ms:.2f}ms, "
+            f"VectorFetch={qdrant_ms:.2f}ms, "
+            f"Reranker={rerank_ms:.2f}ms, "
+            f"MMR={mmr_ms:.2f}ms"
+        )
         
         return [{"product_id": h.payload.get("product_id"), "score": h.score} for h in hits][:fetch_limit]
 
